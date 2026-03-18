@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Focus-Symphony | BISHT x FLAVOURTOWN</title>
+  </head>
+  <body>
+    <header class="main">
+      <nav>
+        <div class="nav__header">
+          <div class="nav__logo">
+            <a href="#">
+              <span style="font-weight: 800; color: #6366f1;">FOCUS-SYMPHONY</span>
+            </a>
+          </div>
+          <div class="nav__menu__btn" id="menu-btn">
+            <i class="ri-menu-3-line"></i>
+          </div>
+        </div>
+        <ul class="nav__links" id="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#features">Instruments</a></li>
+          <li><a href="#architecture">Composition</a></li>
+          <li><a href="#docs">Score</a></li>
+          <li><a href="https://github.com" target="_blank">Github</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__container">
+        <h1><span>FOCUS</span><span>SYMPHONY</span></h1>
+        <p>
+          Conduct your system's resources with surgical precision. 
+          Built with <strong>Go</strong>, Focus-Symphony is an Open Source 
+          orchestrator made in collaboration with <strong>Flavourtown</strong>.
+        </p>
+      <div class="header__btn">
+          <button class="btn" id="open-terminal">
+            BEGIN PERFORMANCE
+            <i class="ri-terminal-box-line"></i>
+          </button>
+        </div>
+        <ul class="socials">
+          <li><a href="#" title="Github"><i class="ri-github-fill"></i></a></li>
+          <li><a href="#" title="Discord"><i class="ri-discord-fill"></i></a></li>
+          <li><a href="#" title="Documentation"><i class="ri-book-read-line"></i></a></li>
+        </ul>
+      </div>
+
+      <!-- TERMINAL SECTION -->
+      <section class="section__container terminal-demo" id="terminal">
+        <h2 class="section__header">The Conductor (Terminal CLI)</h2>
+        <div class="terminal-container">
+          <div class="terminal-header">
+            <div class="terminal-buttons">
+              <span class="btn-dot red"></span>
+              <span class="btn-dot yellow"></span>
+              <span class="btn-dot green"></span>
+            </div>
+            <div class="terminal-title">focus-symphony --tui</div>
+          </div>
+          <div class="terminal-body" id="terminal-output">
+            <pre style="color: #6366f1; font-size: 0.7rem; margin-bottom: 1rem; font-family: monospace;">
+  ____ ___ ____  _   _ _____ 
+ | __ )_ _/ ___|| | | |_   _|
+ |  _ \| |\___ \| |_| | | |  
+ | |_) | | ___) |  _  | | |  
+ |____/___|____/|_| |_| |_|  
+            </pre>
+            <div class="line">Open Source project by BISHT x FLAVOURTOWN</div>
+            <div class="line"><span class="prompt">fs ></span> help</div>
+            <div class="line">Available Commands:</div>
+            <div class="line">  start  - Begin a focus session (blocks sites)</div>
+            <div class="line">  stop   - End the focus session (unblocks sites)</div>
+            <div class="line">  music  - Launch terminal music player</div>
+            <div class="line">  exit   - Close Focus-Symphony</div>
+            <div class="line"><span class="prompt">fs ></span> <span class="cursor">_</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MUSIC PLAYER SECTION -->
+      <section class="section__container music-player" id="music">
+        <h2 class="section__header">Focus Playlists</h2>
+        <div class="playlist-grid">
+          <div class="playlist-card">
+            <i class="ri-disc-line"></i>
+            <h4>Lofi Coding</h4>
+            <p>Chill beats for deep focus.</p>
+            <button class="btn-small">PLAY</button>
+          </div>
+          <div class="playlist-card">
+            <i class="ri-keyboard-line"></i>
+            <h4>Mechanical Rhythm</h4>
+            <p>Typing sounds and ambient noise.</p>
+            <button class="btn-small">PLAY</button>
+          </div>
+          <div class="playlist-card">
+            <i class="ri-rainy-line"></i>
+            <h4>Arch Rain</h4>
+            <p>White noise for isolation.</p>
+            <button class="btn-small">PLAY</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section__container features" id="features">
+        <h2 class="section__header">The Instruments</h2>
+        <div class="features__grid">
+          <div class="features__card">
+            <i class="ri-rhythm-line"></i>
+            <h4>The Orchestrator</h4>
+            <p>A high-concurrency Go engine that balances system threads to ensure your focus apps never skip a beat.</p>
+          </div>
+
+          <div class="features__card">
+            <i class="ri-volume-mute-line"></i>
+            <h4>Acoustic Shield</h4>
+            <p>Automated "distraction jettison" that silences non-essential processes during high-intensity coding sessions.</p>
+          </div>
+          <div class="features__card">
+            <i class="ri-bar-chart-grouped-line"></i>
+            <h4>Visual Rhythm</h4>
+            <p>Real-time system telemetry visualized through a clean, rhythmic TUI dashboard designed for minimal distraction.</p>
+          </div>
+        </div>
+      </section>
+
+      
+      <!-- DOCUMENTATION SECTION -->
+      <section class="section__container docs" id="docs">
+        <h2 class="section__header">The Score (Documentation)</h2>
+        <div class="docs__grid">
+          <div class="docs__content">
+            <h3>How to Conduct</h3>
+            <p>Follow these steps to set up Focus-Symphony on your machine:</p>
+            <ol class="docs__list_steps">
+              <li><strong>Clone the Repo:</strong> <code>git clone https://github.com/focus/symphony.git</code></li>
+              <li><strong>Build with Go:</strong> <code>go build -o focus-symphony main.go</code></li>
+              <li><strong>Initialize:</strong> Run <code>./focus-symphony start</code> to begin your focus session.</li>
+            </ol>
+            <p style="margin-top: 1rem;">The tool will automatically block distracting sites by modifying your <code>/etc/hosts</code> file and start your curated focus playlist.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section__container specs" id="architecture">
+        <div class="specs__container">
+          <div class="specs__content">
+            <h2 class="section__header">A Modern Composition</h2>
+            <p>
+              Focus-Symphony treats your kernel like a concert hall. By tapping directly into the <code>/proc</code> filesystem, it achieves near-zero latency while maintaining a whisper-quiet footprint.
+            </p>
+            <ul class="specs__list">
+              <li><span><i class="ri-check-line"></i></span> Compiled Golang Core</li>
+              <li><span><i class="ri-check-line"></i></span> Native Arch Linux Optimization</li>
+              <li><span><i class="ri-check-line"></i></span> Dynamic Resource Tuning</li>
+            </ul>
+          </div>
+          <div class="specs__image">
+             <img src="images/banner.png" alt="Composition Architecture" style="opacity: 0.9; border-radius: 20px;">
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="section__container">
+          <h3>Ready to tune your system?</h3>
+          <p>Download the latest release and orchestrate your perfect workflow.</p>
+          <p style="font-size: 0.9rem; opacity: 0.6; margin-bottom: 2rem;">An Open Source project by <strong>BISHT</strong> in collaboration with <strong>FLAVOURTOWN</strong>.</p>
+          <button class="btn">INITIALIZE CONDUCTOR</button>
+        </div>
+      </footer>
+    </header>
+
+
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

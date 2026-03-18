@@ -1,0 +1,533 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Inter:wght@400;700;800&display=swap");
+
+:root {
+  /* NEW TECH PALETTE */
+  --primary-color: #0070f3;       /* Professional Modern Blue */
+  --primary-color-dark: #0051af;  /* Hover State Blue */
+  --secondary-color: #1793d1;     /* Arch Linux Blue */
+  --text-dark: #111827;           /* Rich Black for text */
+  --text-light: #6b7280;          /* Subtle Grey for descriptions */
+  --white: #ffffff;
+  --max-width: 1200px;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+img {
+  display: block; /* Changed from flex to block */
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  font-family: "Inter", "Roboto", sans-serif; /* Added Inter for a modern tech feel */
+  background-color: var(--white);
+  color: var(--text-dark);
+}
+
+.main {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+
+  /* Use the banner I generated for you */
+  background-image: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url("images/banner.png");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #0a0a0a; /* Dark base for tech look */
+}
+
+/* Sliding Entrance Animation (kept your logic, updated colors) */
+.main::before {
+  position: absolute;
+  content: "";
+  inset: 0;
+  opacity: 1;
+  background-color: #ffffff;
+  z-index: 999;
+  animation: main-slider 1.5s ease-in-out forwards;
+}
+
+@keyframes main-slider {
+  90% { opacity: 0; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(-100%); }
+}
+
+nav {
+  position: fixed;
+  isolation: isolate;
+  width: 100%;
+  z-index: 9;
+  background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+  backdrop-filter: blur(10px); /* Modern blur effect */
+  border-bottom: 1px solid #eaeaea;
+}
+
+.nav__header {
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav__logo a {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  letter-spacing: -1px;
+}
+
+.nav__menu__btn {
+  font-size: 1.5rem;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+.nav__links {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: var(--white);
+  transition: transform 0.5s;
+  z-index: -1;
+}
+
+.nav__links.open { transform: translateY(100%); }
+
+.nav__links a {
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.header__container {
+  max-width: var(--max-width);
+  margin: auto;
+  padding: 10rem 1rem 5rem; /* Adjusted for fixed nav */
+}
+
+.header__container h1 {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 0 0.5rem;
+  flex-wrap: wrap;
+  font-weight: 900;
+  color: var(--white);
+  font-family: "Inter", sans-serif;
+  letter-spacing: -3px;
+}
+
+.header__container h1 span:nth-child(1) {
+  font-size: 5rem;
+  line-height: 5rem;
+}
+
+.header__container h1 span:nth-child(2) {
+  font-size: 5rem;
+  color: var(--primary-color);
+}
+
+.header__container p {
+  margin-bottom: 3rem;
+  max-width: 600px;
+  font-size: 1.1rem;
+  line-height: 1.8rem;
+  color: #cccccc; /* Light grey on dark background */
+}
+
+button {
+  padding: 1rem 2.5rem;
+  margin-bottom: 2rem;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  background-color: var(--primary-color);
+  border-radius: 6px; /* Slightly more rounded for modern look */
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--primary-color-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 112, 243, 0.3);
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.socials a {
+  display: inline-flex;
+  padding: 10px;
+  font-size: 1.4rem;
+  color: #888;
+  border: 1px solid #444;
+  border-radius: 100%;
+}
+
+.socials a:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background-color: rgba(0, 112, 243, 0.1);
+}
+
+/* Desktop Responsiveness */
+@media (width > 768px) {
+  nav {
+    padding: 1.5rem 10%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .nav__header { width: auto; background: transparent; }
+  .nav__menu__btn { display: none; }
+
+  .nav__links {
+    position: static;
+    flex-direction: row;
+    background: transparent;
+    padding: 0;
+    width: auto;
+    z-index: 1;
+    transform: none !important;
+  }
+
+  .nav__links a:hover { color: var(--primary-color); }
+
+  .header__container h1 span:nth-child(1),
+  .header__container h1 span:nth-child(2) {
+    font-size: 7rem;
+    line-height: 7rem;
+  }
+}
+/* --- Features Section (The Instruments) --- */
+/* --- Terminal Section --- */
+.terminal-demo {
+  background-color: #111827;
+  padding: 100px 1rem;
+  color: var(--white);
+}
+
+.terminal-container {
+  max-width: 800px;
+  margin: auto;
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid #374151;
+}
+
+.terminal-header {
+  background-color: #1f2937;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.terminal-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.red { background-color: #ff5f56; }
+.yellow { background-color: #ffbd2e; }
+.green { background-color: #27c93f; }
+
+.terminal-title {
+  color: #9ca3af;
+  font-size: 0.8rem;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.terminal-body {
+  padding: 20px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #d1d5db;
+  min-height: 300px;
+}
+
+.line {
+  margin-bottom: 5px;
+}
+
+.prompt {
+  color: #10b981;
+  font-weight: bold;
+}
+
+.cursor {
+  background-color: #fff;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* --- Music Player Section --- */
+.music-player {
+  padding: 100px 1rem;
+  background-color: #f3f4f6;
+}
+
+.playlist-grid {
+  max-width: var(--max-width);
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.playlist-card {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.playlist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.playlist-card i {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.playlist-card h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.btn-small {
+  padding: 0.5rem 1.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.btn-small:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.features {
+  background-color: #f9fafb; /* Subtle light grey background */
+  padding: 100px 1rem;
+}
+
+.section__header {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 4rem;
+  color: var(--text-main);
+  letter-spacing: -1px;
+}
+
+.features__grid {
+  max-width: var(--max-width);
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.features__card {
+  background: var(--white);
+  padding: 3rem 2rem;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.features__card:hover {
+  transform: translateY(-10px);
+  border-color: var(--primary-color);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+.features__card i {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+
+.features__card h4 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.features__card p {
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* --- Specs Section (Composition) --- */
+/* --- Documentation (Score) Section --- */
+.docs {
+  padding: 100px 1rem;
+  background-color: var(--white);
+}
+
+.docs__grid {
+  max-width: 800px;
+  margin: auto;
+}
+
+.docs__content h3 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+}
+
+.docs__list_steps {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.docs__list_steps li {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.docs__list_steps code {
+  background-color: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  color: #ef4444;
+}
+
+.specs {
+  padding: 100px 1rem;
+}
+
+.specs__container {
+  max-width: var(--max-width);
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  flex-wrap: wrap; /* Stacks on mobile */
+}
+
+.specs__content {
+  flex: 1;
+  min-width: 300px;
+}
+
+.specs__content p {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+.specs__image {
+  flex: 1;
+  min-width: 300px;
+}
+
+.specs__image img {
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+.specs__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.specs__list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.specs__list li span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(99, 102, 241, 0.1);
+  color: var(--primary-color);
+  border-radius: 50%;
+  font-size: 0.8rem;
+}
+
+/* --- Footer (Call to Action) --- */
+.footer {
+  background-color: #0f172a; /* Deep tech navy */
+  color: var(--white);
+  padding: 100px 1rem;
+  text-align: center;
+}
+
+.footer h3 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 800;
+  letter-spacing: -2px;
+}
+*{
+  background: fixed;
+  color: #0a0a0a;
+}
+
+
+.footer p {
+  opacity: 0.7;
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+}
+
