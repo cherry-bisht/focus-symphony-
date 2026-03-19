@@ -8,8 +8,16 @@ import (
 	"time"
 )
 
+const hostsPath = "/etc/hosts"
+const blockMarker = "# FOCUS-SYMPHONY-BLOCK"
+
+var sitesToBlock = []string{
+	"www.youtube.com", "youtube.com",
+	"www.reddit.com", "reddit.com",
+	"www.twitter.com", "twitter.com", "x.com",
+}
+
 func main() {
-	// BISHT ASCII ART introduction
 	fmt.Println(`
   ____ ___ ____  _   _ _____ 
  | __ )_ _/ ___|| | | |_   _|
@@ -17,14 +25,21 @@ func main() {
  | |_) | | ___) |  _  | | |  
  |____/___|____/|_| |_| |_|  
                                `)
-	fmt.Println("FOCUS-SYMPHONY v1.0.0")
+	fmt.Println("FOCUS-SYMPHONY v1.1.0")
 	fmt.Println("Harmonizing Linux Performance for Deep Work")
-	fmt.Println("Open Source project made in collaboration with Flavourtown")
 	fmt.Println("-------------------------------------------")
+
+	// Check if we have write access to /etc/hosts
+	file, err := os.OpenFile(hostsPath, os.O_WRONLY, 0666)
+	if err != nil {
+		fmt.Println("ERROR: Insufficient privileges to modify /etc/hosts.")
+		fmt.Println("Please run with: sudo focus-symphony")
+		return
+	}
+	file.Close()
 
 	reader := bufio.NewReader(os.Stdin)
 
-	// loop chalao jab tak user exit na kare
 	for {
 		fmt.Print("fs > ")
 		input, _ := reader.ReadString('\n')
@@ -32,18 +47,15 @@ func main() {
 
 		switch input {
 		case "start":
-			// session shuru karo
 			startSession()
 		case "stop":
-			// session band karo
 			stopSession()
 		case "music":
-			// music bajao
 			playMusic()
 		case "help":
-			// help dikhao
 			showHelp()
 		case "exit":
+			stopSession() // Cleanup before exit
 			fmt.Println("Exiting Focus-Symphony. Goodbye!")
 			return
 		default:
@@ -54,32 +66,70 @@ func main() {
 
 func startSession() {
 	fmt.Println("Initializing Focus Session...")
+	
+	// First, clean up any existing blocks to avoid duplicates
+	cleanHosts()
+
+	f, err := os.OpenFile(hostsPath, os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Printf("Failed to open hosts file: %v\n", err)
+		return
+	}
+	defer f.Close()
+
+	fmt.Fprintln(f, "\n"+blockMarker)
+	for _, site := range sitesToBlock {
+		fmt.Fprintf(f, "127.0.0.1 %s\n", site)
+	}
+	fmt.Fprintln(f, blockMarker)
+
 	time.Sleep(1 * time.Second)
-	// etc/hosts file modify karke sites block karo
-	fmt.Println("Acoustic Shield ACTIVATED: Distracting sites (YouTube, Reddit, Twitter) blocked via /etc/hosts.")
-	fmt.Println("The Orchestrator is balancing system threads...")
+	fmt.Println("Acoustic Shield ACTIVATED: Distracting sites blocked.")
 	fmt.Println("Session ACTIVE. Deep work mode enabled.")
 }
 
 func stopSession() {
 	fmt.Println("Ending Focus Session...")
+	cleanHosts()
 	time.Sleep(1 * time.Second)
-	// sites unblock karo
 	fmt.Println("Acoustic Shield DEACTIVATED: Sites unblocked.")
 	fmt.Println("Session STOPPED.")
+}
+
+func cleanHosts() {
+	input, err := os.ReadFile(hostsPath)
+	if err != nil {
+		return
+	}
+
+	lines := strings.Split(string(input), "\n")
+	var newLines []string
+	isBlockingSection := false
+
+	for _, line := range lines {
+		if strings.TrimSpace(line) == blockMarker {
+			isBlockingSection = !isBlockingSection
+			continue
+		}
+		if !isBlockingSection {
+			newLines = append(newLines, line)
+		}
+	}
+
+	// Remove trailing empty lines and write back
+	output := strings.Join(newLines, "\n")
+	os.WriteFile(hostsPath, []byte(output), 0644)
 }
 
 func playMusic() {
 	fmt.Println("Loading Focus Playlist...")
 	time.Sleep(500 * time.Millisecond)
-	// coding wala lofi music baj raha hai
-	fmt.Println("Now playing: 'Lofi Beats for Coding' (YouTube/MP3)")
-	fmt.Println("Press Ctrl+C to stop music player interface.")
+	fmt.Println("Now playing: 'Lofi Beats for Coding' (YouTube/MP3 simulation)")
 }
 
 func showHelp() {
 	fmt.Println("Available Commands:")
-	fmt.Println("  start  - Begin a focus session (blocks sites)")
+	fmt.Println("  start  - Begin a focus session (actually blocks sites)")
 	fmt.Println("  stop   - End the focus session (unblocks sites)")
 	fmt.Println("  music  - Launch terminal music player")
 	fmt.Println("  help   - Show this help message")

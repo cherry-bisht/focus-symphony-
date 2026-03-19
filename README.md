@@ -1,6 +1,6 @@
-# Focus-Symphony
+# Focus-Symphony 🎻
 
-**Focus-Symphony** is an Open Source terminal-based focus orchestrator made in collaboration with **Flavourtown**. It is designed for developers who want to achieve deep work without digital noise.
+**Focus-Symphony** is an open-source productivity suite designed for developers who want to achieve deep work without digital noise. It combines a powerful Go-based terminal orchestrator with a sleek, responsive landing page.
 
   ____ ___ ____  _   _ _____ 
  | __ )_ _/ ___|| | | |_   _|
@@ -8,31 +8,61 @@
  | |_) | | ___) |  _  | | |  
  |____/___|____/|_| |_| |_|  
 
-## Instruments (Features)
+---
 
-*   **The Orchestrator**: A high-concurrency Go engine that manages your focus session.
-*   **Acoustic Shield**: Automatically blocks distracting websites (YouTube, Reddit, Twitter) while you work.
-*   **Terminal Music Player**: Plays focus playlists directly from the terminal.
-*   **Visual Rhythm**: Real-time TUI dashboard for system telemetry and focus stats.
+## 🚀 Key Instruments (Features)
 
-## How to Conduct Your Session
+### 🎼 The Orchestrator (CLI)
+A high-performance Go engine that balances your session:
+*   **Acoustic Shield**: Automatically blocks distracting websites (YouTube, Reddit, Twitter) by managing `/etc/hosts`.
+*   **Terminal Music Player**: Stream focus-optimized playlists directly from your terminal.
+*   **System Telemetry**: Real-time monitoring of your focus session and system performance.
 
-### 1. Installation
-Clone the repository and build the Go binary:
-```bash
-git clone https://github.com/focus/symphony.git
-cd symphony
-go build -o focus-symphony main.go
-```
+### 🎨 Visual Rhythm (Web)
+A modern landing page designed with **Vanilla CSS** and **ScrollReveal**:
+*   **Terminal Simulator**: Interactive demonstration of CLI commands.
+*   **Responsive Design**: Optimized for all devices, ensuring your focus stats are always visible.
+*   **Modern Aesthetics**: Clean typography and interactive animations.
 
-### 2. Basic Commands
-*   `focus-symphony start`: Begins a focus session and blocks distracting sites.
-*   `focus-symphony stop`: Ends the session and restores access.
-*   `focus-symphony music`: Opens the terminal music player interface.
+---
 
-### 3. Collaboration
+## 🛠️ Global Access: Use Anywhere
+
+To use **Focus-Symphony** from any directory in your terminal, follow these steps:
+
+1.  **Build and Install**:
+    ```bash
+    go build -o focus-symphony main.go
+    mv focus-symphony ~/.local/bin/
+    ```
+2.  **Run Command**:
+    Now simply type `focus-symphony` in any terminal window.
+
+---
+
+## 🎮 How to Conduct Your Session
+
+Available commands in the Orchestrator:
+*   `start`  - Activates the Acoustic Shield and begins your focus session.
+*   `music`  - Launches the terminal music player with focus playlists.
+*   `stop`   - Deactivates site blocking and restores system defaults.
+*   `help`   - Displays available session controls.
+*   `exit`   - Gracefully closes the Orchestrator.
+
+---
+
+## 🛠️ Technical Stack
+
+- **Backend**: Go (Orchestrator Engine)
+- **Frontend**: HTML5, Vanilla CSS, JavaScript (Visual Rhythm)
+- **Animations**: ScrollReveal.js
+- **Icons**: Remix Icon
+
+---
+
+## 🤝 Collaboration
 This project is an Open Source initiative by **BISHT** in collaboration with **Flavourtown**.
 
 ---
 
-*Built with passion for the developer community.*
+*Built with passion for the developer community. Harmonizing Linux Performance for Deep Work.*
