@@ -20,11 +20,11 @@ var sitesToBlock = []string{
 }
 
 var playlist = []string{
-	"Focus Symphony #1 in G Minor (Lofi Edit)",
-	"Deep Work Nocturne - Movement II",
-	"The Orchestrator's Ambient Flow",
-	"Binary Beats for High-Performance Coding",
-	"Silicon Valley Rain (White Noise)",
+	"Midnight Coding Session (Lofi)",
+	"The Conductor's Deep Space Mix",
+	"Focus Symphony - Bass Boosted",
+	"Ambient Rain & Code",
+	"Cyberpunk Chill Engine",
 }
 
 var musicCmd *exec.Cmd
@@ -40,10 +40,9 @@ func main() {
  | |_) | | ___) |  _  | | |  
  |____/___|____/|_| |_| |_|  
                                `)
-	fmt.Println("FOCUS-SYMPHONY v1.4.0 (The Audio Engine)")
+	fmt.Println("FOCUS-SYMPHONY v1.5.0 (The Audio Overhaul)")
 	fmt.Println("-------------------------------------------")
 
-	// Verify we can write to /etc/hosts
 	f, err := os.OpenFile(hostsPath, os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Println("ERROR: Permission Denied! Run with: sudo focus-symphony")
@@ -79,7 +78,7 @@ func main() {
 			fmt.Println("Exiting. Keep Focus!")
 			return
 		default:
-			fmt.Printf("Unknown command: %s. Type 'help' for commands.\n", input)
+			fmt.Printf("Unknown command: %s. Type 'help'.\n", input)
 		}
 	}
 }
@@ -103,8 +102,7 @@ func startSession() {
 		fmt.Fprintf(f, "::1       %s\n", site)
 	}
 	fmt.Fprintln(f, blockMarker)
-
-	fmt.Println("SUCCESS: Deep Work Mode Engaged. Distractions Purged.")
+	fmt.Println("SUCCESS: Sites blocked. Deep work mode active.")
 }
 
 func stopSession() {
@@ -117,10 +115,7 @@ func stopSession() {
 }
 
 func cleanHosts() {
-	input, err := os.ReadFile(hostsPath)
-	if err != nil {
-		return
-	}
+	input, _ := os.ReadFile(hostsPath)
 	lines := strings.Split(string(input), "\n")
 	var newLines []string
 	isBlocking := false
@@ -139,30 +134,37 @@ func cleanHosts() {
 
 func playMusic() {
 	if musicCmd != nil && musicCmd.Process != nil {
-		fmt.Println("   (Music is already playing. Type 'stop_music' first if you want to switch tracks.)")
+		fmt.Println("   (Music is already playing. Type 'stop_music' first.)")
 		return
 	}
 
 	track := playlist[rand.Intn(len(playlist))]
-	fmt.Printf("🎵 Now playing: %s\n", track)
-	fmt.Println("   [━━━━━━━●──────────────] 1:24 / 4:50")
+	fmt.Printf("🎵 Injecting Audio: %s\n", track)
+	
+	// Ultra-stable stream
+	streamURL := "http://usa9.fastcast4u.com:8014/1" 
 
-	// We'll use a public Lofi stream URL
-	streamURL := "http://stream.zeno.fm/0r0xa792kwzuv" // Lofi Hip Hop Radio
-
-	// We use the regular user to run mpv to avoid audio permission issues with sudo
 	user := os.Getenv("SUDO_USER")
 	if user == "" {
 		user = os.Getenv("USER")
 	}
 
-	// mpv --no-video plays just the audio in the background
-	musicCmd = exec.Command("sudo", "-u", user, "mpv", "--no-video", streamURL)
+	// CRITICAL: We need to pass the audio environment variables to sudo
+	// This usually fixes the "no sound" issue in Linux
+	runtimeDir := "/run/user/1000" // Default for primary user
+	if u, err := exec.Command("id", "-u", user).Output(); err == nil {
+		runtimeDir = "/run/user/" + strings.TrimSpace(string(u))
+	}
+
+	// Try mpv with environment variables
+	musicCmd = exec.Command("sudo", "-u", user, "env", "XDG_RUNTIME_DIR="+runtimeDir, "mpv", "--no-video", "--volume=80", streamURL)
 	err := musicCmd.Start()
+	
 	if err != nil {
-		fmt.Printf("   (Audio engine error: %v. Is mpv installed?)\n", err)
+		fmt.Printf("   ❌ Audio Engine Error: %v\n", err)
 	} else {
-		fmt.Println("   🚀 Background audio engine started! Hearing the vibes?")
+		fmt.Println("   🚀 SOUND WAVE ACTIVATED. Hearing the beats now?")
+		fmt.Println("   (It may take 5 seconds to buffer...)")
 	}
 }
 
@@ -170,36 +172,23 @@ func stopMusic() {
 	if musicCmd != nil && musicCmd.Process != nil {
 		musicCmd.Process.Kill()
 		musicCmd = nil
-		fmt.Println("🎵 Music stopped.")
-	} else {
-		fmt.Println("   (No music is playing.)")
+		fmt.Println("🎵 Audio Engine Offline.")
 	}
 }
 
 func startRapidFocus() {
-	fmt.Println("🚀 RAPID FOCUS INITIATED: 25-minute sprint starting now.")
+	fmt.Println("🚀 RAPID FOCUS INITIATED (25m)")
 	startSession()
 }
 
 func showStats() {
 	if !isShieldActive {
-		fmt.Println("No active session. Type 'start' to begin.")
+		fmt.Println("No active session.")
 		return
 	}
-	duration := time.Since(sessionStart).Round(time.Second)
-	fmt.Println("📊 FOCUS TELEMETRY:")
-	fmt.Printf("   - Active Duration: %s\n", duration)
-	fmt.Println("   - Shield Status: ACTIVE (7 targets blocked)")
-	fmt.Println("   - Thread Balance: OPTIMAL")
+	fmt.Printf("📊 FOCUS TIME: %s\n", time.Since(sessionStart).Round(time.Second))
 }
 
 func showHelp() {
-	fmt.Println("Available Instruments:")
-	fmt.Println("  start       - Activate site-blocking Shield")
-	fmt.Println("  stop        - Restore site access")
-	fmt.Println("  music/song  - Start Lofi Radio in background")
-	fmt.Println("  stop_music  - Stop background radio")
-	fmt.Println("  rapid       - Start a 25-minute Focus Sprint")
-	fmt.Println("  stats       - View deep work telemetry")
-	fmt.Println("  exit        - End session and close all")
+	fmt.Println("Commands: start, stop, music, stop_music, rapid, stats, exit")
 }
