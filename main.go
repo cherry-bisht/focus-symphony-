@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -19,15 +20,19 @@ var sitesToBlock = []string{
 	"www.twitter.com", "twitter.com", "x.com",
 }
 
-var playlist = []string{
-	"Midnight Coding Session (Lofi)",
-	"The Conductor's Deep Space Mix",
-	"Focus Symphony - Bass Boosted",
-	"Ambient Rain & Code",
-	"Cyberpunk Chill Engine",
+var playlist = []struct {
+	name string
+	url  string
+}{
+	{"Lofi Hip Hop - Beats to Relax/Study", "https://www.youtube.com/watch?v=jfKfPfyJRdk"},
+	{"Lofi Girl - Sleep Mix", "https://www.youtube.com/watch?v=rUxyKA_-grg"},
+	{"Dark Academia Study Music", "https://www.youtube.com/watch?v=hHW1oY26kxQ"},
+	{"Coding in the Rain (Ambient)", "https://www.youtube.com/watch?v=mPZkdNFkNps"},
+	{"Cyberpunk / Synthwave Focus Mix", "https://www.youtube.com/watch?v=qYnA9wWFHLI"},
 }
 
 var musicCmd *exec.Cmd
+var currentTrack string
 var sessionStart time.Time
 var isShieldActive bool
 
@@ -40,22 +45,25 @@ func main() {
  | |_) | | ___) |  _  | | |  
  |____/___|____/|_| |_| |_|  
                                `)
-	fmt.Println("FOCUS-SYMPHONY v1.5.0 (The Audio Overhaul)")
-	fmt.Println("-------------------------------------------")
-
-	f, err := os.OpenFile(hostsPath, os.O_WRONLY, 0644)
-	if err != nil {
-		fmt.Println("ERROR: Permission Denied! Run with: sudo focus-symphony")
-		return
-	}
-	f.Close()
+	fmt.Println("FOCUS-SYMPHONY v1.6.0 (yt-dlp Audio Engine)")
+	fmt.Println("--------------------------------------------")
+	fmt.Println("Type 'help' to see available commands.")
+	fmt.Println()
 
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
 		fmt.Print("fs > ")
-		input, _ := reader.ReadString('\n')
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println()
+			break
+		}
 		input = strings.TrimSpace(input)
+
+		if input == "" {
+			continue
+		}
 
 		switch input {
 		case "start":
@@ -66,6 +74,8 @@ func main() {
 			playMusic()
 		case "stop_music":
 			stopMusic()
+		case "playlist":
+			showPlaylist()
 		case "rapid":
 			startRapidFocus()
 		case "stats":
@@ -78,20 +88,30 @@ func main() {
 			fmt.Println("Exiting. Keep Focus!")
 			return
 		default:
-			fmt.Printf("Unknown command: %s. Type 'help'.\n", input)
+			if len(input) == 1 && input[0] >= '1' && input[0] <= '5' {
+				idx := int(input[0] - '1')
+				playTrack(idx)
+			} else {
+				fmt.Printf("Unknown command: '%s'. Type 'help'.\n", input)
+			}
 		}
 	}
 }
 
 func startSession() {
-	fmt.Println("Activating Acoustic Shield...")
+	if os.Getuid() != 0 {
+		fmt.Println("   ❌ ERROR: 'start' requires sudo.")
+		fmt.Println("   Run: sudo focus-symphony")
+		return
+	}
+	fmt.Println("⚡ Activating Acoustic Shield...")
 	cleanHosts()
 	isShieldActive = true
 	sessionStart = time.Now()
 
 	f, err := os.OpenFile(hostsPath, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
+		fmt.Printf("   ❌ Error: %v\n", err)
 		return
 	}
 	defer f.Close()
@@ -102,15 +122,22 @@ func startSession() {
 		fmt.Fprintf(f, "::1       %s\n", site)
 	}
 	fmt.Fprintln(f, blockMarker)
-	fmt.Println("SUCCESS: Sites blocked. Deep work mode active.")
+	fmt.Println("✅ Sites blocked. Deep work mode active.")
+	fmt.Println("   Tip: type 'music' to start your focus playlist")
 }
 
 func stopSession() {
 	if isShieldActive {
-		fmt.Println("Deactivating Acoustic Shield...")
+		if os.Getuid() != 0 {
+			fmt.Println("   ❌ ERROR: 'stop' requires sudo.")
+			return
+		}
+		fmt.Println("⚡ Deactivating Acoustic Shield...")
 		cleanHosts()
 		isShieldActive = false
-		fmt.Println("SUCCESS: World access restored.")
+		fmt.Println("✅ World access restored.")
+	} else {
+		fmt.Println("   (No active shield to stop.)")
 	}
 }
 
@@ -132,63 +159,206 @@ func cleanHosts() {
 	os.WriteFile(hostsPath, []byte(strings.Join(newLines, "\n")+"\n"), 0644)
 }
 
-func playMusic() {
-	if musicCmd != nil && musicCmd.Process != nil {
-		fmt.Println("   (Music is already playing. Type 'stop_music' first.)")
-		return
-	}
-
-	track := playlist[rand.Intn(len(playlist))]
-	fmt.Printf("🎵 Injecting Audio: %s\n", track)
-	
-	// Ultra-stable stream
-	streamURL := "http://usa9.fastcast4u.com:8014/1" 
-
+func getEffectiveUser() string {
 	user := os.Getenv("SUDO_USER")
 	if user == "" {
 		user = os.Getenv("USER")
 	}
-
-	// CRITICAL: We need to pass the audio environment variables to sudo
-	// This usually fixes the "no sound" issue in Linux
-	runtimeDir := "/run/user/1000" // Default for primary user
-	if u, err := exec.Command("id", "-u", user).Output(); err == nil {
-		runtimeDir = "/run/user/" + strings.TrimSpace(string(u))
+	if user == "" {
+		user = "nobody"
 	}
+	return user
+}
 
-	// Try mpv with environment variables
-	musicCmd = exec.Command("sudo", "-u", user, "env", "XDG_RUNTIME_DIR="+runtimeDir, "mpv", "--no-video", "--volume=80", streamURL)
-	err := musicCmd.Start()
-	
+func getRuntimeDir(user string) string {
+	out, err := exec.Command("id", "-u", user).Output()
 	if err != nil {
-		fmt.Printf("   ❌ Audio Engine Error: %v\n", err)
-	} else {
-		fmt.Println("   🚀 SOUND WAVE ACTIVATED. Hearing the beats now?")
-		fmt.Println("   (It may take 5 seconds to buffer...)")
+		return "/run/user/1000"
 	}
+	return "/run/user/" + strings.TrimSpace(string(out))
+}
+
+func getMusicHome() string {
+	user := getEffectiveUser()
+	out, err := exec.Command("getent", "passwd", user).Output()
+	if err == nil {
+		parts := strings.Split(strings.TrimSpace(string(out)), ":")
+		if len(parts) >= 6 {
+			return parts[5]
+		}
+	}
+	home, _ := os.UserHomeDir()
+	return home
+}
+
+func buildMpvCmd(audioSrc string, user string, runtimeDir string) *exec.Cmd {
+	mpvArgs := []string{
+		"--no-video",
+		"--volume=80",
+		"--really-quiet",
+		"--msg-level=all=error",
+		audioSrc,
+	}
+
+	if os.Getuid() == 0 {
+		args := []string{"-u", user, "env",
+			"XDG_RUNTIME_DIR=" + runtimeDir,
+			"PULSE_SERVER=unix:" + runtimeDir + "/pulse/native",
+			"mpv",
+		}
+		args = append(args, mpvArgs...)
+		return exec.Command("sudo", args...)
+	}
+
+	cmd := exec.Command("mpv", mpvArgs...)
+	cmd.Env = append(os.Environ(), "XDG_RUNTIME_DIR="+runtimeDir)
+	return cmd
+}
+
+func checkDeps() bool {
+	ok := true
+	for _, dep := range []string{"mpv", "yt-dlp"} {
+		if _, err := exec.LookPath(dep); err != nil {
+			fmt.Printf("   ❌ Missing: %s  →  sudo pacman -S %s\n", dep, dep)
+			ok = false
+		}
+	}
+	return ok
+}
+
+func playMusic() {
+	if musicCmd != nil && musicCmd.Process != nil {
+		fmt.Printf("   🎵 Already playing: %s\n", currentTrack)
+		fmt.Println("   Type 'stop_music' to stop, or 'playlist' to pick a track.")
+		return
+	}
+	playTrack(rand.Intn(len(playlist)))
+}
+
+func playTrack(idx int) {
+	if idx < 0 || idx >= len(playlist) {
+		fmt.Println("   Invalid track number.")
+		return
+	}
+
+	if musicCmd != nil && musicCmd.Process != nil {
+		stopMusic()
+	}
+
+	if !checkDeps() {
+		return
+	}
+
+	track := playlist[idx]
+	user := getEffectiveUser()
+	runtimeDir := getRuntimeDir(user)
+
+	homeDir := getMusicHome()
+	localPath := filepath.Join(homeDir, ".local/share/focus-symphony/assets/lofi.mp3")
+	audioSrc := track.url
+
+	if _, err := os.Stat(localPath); err == nil {
+		audioSrc = localPath
+		fmt.Printf("🎵 Playing local file: %s\n", filepath.Base(localPath))
+	} else {
+		fmt.Printf("🎵 Streaming: %s\n", track.name)
+		fmt.Println("   Resolving stream via yt-dlp... (5-10 sec)")
+
+		ytArgs := []string{"-f", "bestaudio", "--get-url", "--no-playlist", track.url}
+		var ytCmd *exec.Cmd
+		if os.Getuid() == 0 {
+			args := []string{"-u", user, "yt-dlp"}
+			args = append(args, ytArgs...)
+			ytCmd = exec.Command("sudo", args...)
+		} else {
+			ytCmd = exec.Command("yt-dlp", ytArgs...)
+		}
+
+		out, err := ytCmd.Output()
+		if err != nil {
+			fmt.Printf("   ❌ yt-dlp failed: %v\n", err)
+			fmt.Println("   Try: yt-dlp -U  (to update)")
+			return
+		}
+
+		urls := strings.Split(strings.TrimSpace(string(out)), "\n")
+		if len(urls) == 0 || urls[0] == "" {
+			fmt.Println("   ❌ No stream URL found. Video may be unavailable.")
+			return
+		}
+		audioSrc = urls[0]
+	}
+
+	musicCmd = buildMpvCmd(audioSrc, user, runtimeDir)
+	musicCmd.Stdout = nil
+	musicCmd.Stderr = nil
+
+	if err := musicCmd.Start(); err != nil {
+		fmt.Printf("   ❌ mpv failed: %v\n", err)
+		musicCmd = nil
+		return
+	}
+
+	currentTrack = track.name
+	fmt.Println("   ✅ Audio engine running. Volume: 80%")
+	fmt.Println("   Type 'stop_music' to stop.")
+
+	go func() {
+		musicCmd.Wait()
+		currentTrack = ""
+		musicCmd = nil
+	}()
 }
 
 func stopMusic() {
-	if musicCmd != nil && musicCmd.Process != nil {
-		musicCmd.Process.Kill()
-		musicCmd = nil
-		fmt.Println("🎵 Audio Engine Offline.")
+	if musicCmd == nil || musicCmd.Process == nil {
+		fmt.Println("   (No music is currently playing.)")
+		return
 	}
+	musicCmd.Process.Kill()
+	musicCmd.Wait()
+	exec.Command("pkill", "-9", "-u", getEffectiveUser(), "mpv").Run()
+	musicCmd = nil
+	currentTrack = ""
+	fmt.Println("🎵 Audio engine offline.")
+}
+
+func showPlaylist() {
+	fmt.Println("\n🎵 Focus Playlists (type the number to play):")
+	fmt.Println()
+	for i, track := range playlist {
+		fmt.Printf("   [%d] %s\n", i+1, track.name)
+	}
+	fmt.Println()
 }
 
 func startRapidFocus() {
-	fmt.Println("🚀 RAPID FOCUS INITIATED (25m)")
+	fmt.Println("🚀 RAPID FOCUS — 25 min Pomodoro")
 	startSession()
+	playMusic()
 }
 
 func showStats() {
 	if !isShieldActive {
-		fmt.Println("No active session.")
+		fmt.Println("   No active focus session.")
 		return
 	}
-	fmt.Printf("📊 FOCUS TIME: %s\n", time.Since(sessionStart).Round(time.Second))
+	fmt.Printf("📊 FOCUS TIME : %s\n", time.Since(sessionStart).Round(time.Second))
+	if currentTrack != "" {
+		fmt.Printf("🎵 NOW PLAYING: %s\n", currentTrack)
+	}
 }
 
 func showHelp() {
-	fmt.Println("Commands: start, stop, music, stop_music, rapid, stats, exit")
+	fmt.Println(`
+Commands:
+  start        Block distracting sites          [needs sudo]
+  stop         Unblock sites                    [needs sudo]
+  music        Play a random focus track
+  playlist     List all tracks (type 1-5 to pick)
+  stop_music   Stop music
+  rapid        25-min Pomodoro + music          [needs sudo]
+  stats        Show session time + current track
+  exit         Quit
+`)
 }
