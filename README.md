@@ -34,6 +34,10 @@ To use **Focus-Symphony** from any directory in your terminal, follow these step
     ```bash
     go build -o focus-symphony main.go
     mv focus-symphony ~/.local/bin/
+    
+    # Install Assets (REQUIRED for Local Music)
+    mkdir -p ~/.local/share/focus-symphony/assets
+    cp assets/lofi.mp3 ~/.local/share/focus-symphony/assets/
     ```
 2.  **Run Command**:
     Now simply type `focus-symphony` in any terminal window.

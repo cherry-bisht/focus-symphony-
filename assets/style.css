@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  font-family: 'Syne', sans-serif;
+  background: #fff8f2;
+}
+
+.fs-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: white;
+}
+
+.fs-btn {
+  background: #e8530a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.fs-download {
+  padding: 2rem;
+}
