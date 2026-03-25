@@ -1,2 +1,0 @@
-https://opstree.com [200] [Digital Engineering & Enterprise Transformation Partner - OpsTree] [Cloudways,Elementor:3.30.4,HTTP/3,Hostinger,Hostinger CDN,Linkedin Ads,MySQL,PHP:8.3.28,Slider Revolution:6.7.10,WooCommerce:9.4.5,WordPress Block Editor,WordPress:6.9]
-https://www.opstree.com [301,200] [Digital Engineering & Enterprise Transformation Partner - OpsTree] [Cloudways,Elementor:3.30.4,HTTP/3,Hostinger,Hostinger CDN,Linkedin Ads,MySQL,PHP:8.3.28,Slider Revolution:6.7.10,WooCommerce:9.4.5,WordPress Block Editor,WordPress:6.9]
