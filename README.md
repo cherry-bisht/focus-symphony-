@@ -26,21 +26,42 @@ A modern landing page designed with **Vanilla CSS** and **ScrollReveal**:
 
 ---
 
-## 🛠️ Global Access: Use Anywhere
+## 🛠️ Installation
 
-To use **Focus-Symphony** from any directory in your terminal, follow these steps:
+### One-Command Install (Recommended)
 
-1.  **Build and Install**:
-    ```bash
-    go build -o focus-symphony main.go
-    mv focus-symphony ~/.local/bin/
-    
-    # Install Assets (REQUIRED for Local Music)
-    mkdir -p ~/.local/share/focus-symphony/assets
-    cp assets/lofi.mp3 ~/.local/share/focus-symphony/assets/
-    ```
-2.  **Run Command**:
-    Now simply type `focus-symphony` in any terminal window.
+```bash
+git clone https://github.com/your-repo/focus-symphony.git
+cd focus-symphony
+chmod +x install.sh && ./install.sh
+```
+
+The installer auto-detects your system and installs missing dependencies via `pacman`, `apt`, `dnf`, `brew`, `zypper`, or `apk`.
+
+### Manual Install
+
+```bash
+go build -o focus-symphony main.go
+mv focus-symphony ~/.local/bin/
+
+# Install Assets (for local music playback)
+mkdir -p ~/.local/share/focus-symphony/assets
+cp assets/lofi.mp3 ~/.local/share/focus-symphony/assets/
+```
+
+### Dependencies
+
+| Tool | Purpose |
+|------|---------|
+| `go` | Build the binary |
+| `mpv` | Audio playback engine |
+| `yt-dlp` | Stream resolver for online tracks |
+
+> **Note:** `yt-dlp` is best installed via `pip3 install yt-dlp` to stay up to date.
+
+### A note on `sudo`
+
+`start` and `stop` modify `/etc/hosts` and require root. If you run `focus-symphony` as a normal user and type `start`, the app will **automatically prompt for your password and re-launch with sudo** — you don't need to close and reopen it.
 
 ---
 
