@@ -33,7 +33,7 @@ A modern landing page designed with **Vanilla CSS** and **ScrollReveal**:
 ```bash
 git clone https://github.com/cherry-bisht/focus-symphony-.git
 cd focus-symphony-
-chmod +x install.sh && ./install.sh
+chmod +x build.sh && ./build.sh
 ```
 
 The installer auto-detects your system and installs missing dependencies via `pacman`, `apt`, `dnf`, `brew`, `zypper`, or `apk`.
