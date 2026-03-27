@@ -31,7 +31,7 @@ A modern landing page designed with **Vanilla CSS** and **ScrollReveal**:
 ### One-Command Install (Recommended)
 
 ```bash
-git clone https://github.com/your-repo/focus-symphony.git
+https://github.com/cherry-bisht/focus-symphony-
 cd focus-symphony
 chmod +x install.sh && ./install.sh
 ```
