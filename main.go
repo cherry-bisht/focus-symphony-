@@ -47,11 +47,10 @@ func main() {
                                `)
 	fmt.Println("FOCUS-SYMPHONY v1.6.0 (yt-dlp Audio Engine)")
 	fmt.Println("--------------------------------------------")
-	fmt.Println("Type 'help' to see available commands.")
 	fmt.Println()
+	showHelp() // FIX 1: show help menu on startup
 
 	reader := bufio.NewReader(os.Stdin)
-
 	for {
 		fmt.Print("fs > ")
 		input, err := reader.ReadString('\n')
@@ -60,11 +59,9 @@ func main() {
 			break
 		}
 		input = strings.TrimSpace(input)
-
 		if input == "" {
 			continue
 		}
-
 		switch input {
 		case "start":
 			startSession()
@@ -120,14 +117,12 @@ func startSession() {
 	cleanHosts()
 	isShieldActive = true
 	sessionStart = time.Now()
-
 	f, err := os.OpenFile(hostsPath, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Printf("   ❌ Error: %v\n", err)
 		return
 	}
 	defer f.Close()
-
 	fmt.Fprintln(f, blockMarker)
 	for _, site := range sitesToBlock {
 		fmt.Fprintf(f, "127.0.0.1 %s\n", site)
@@ -211,7 +206,6 @@ func buildMpvCmd(audioSrc string, user string, runtimeDir string) *exec.Cmd {
 		"--msg-level=all=error",
 		audioSrc,
 	}
-
 	if os.Getuid() == 0 {
 		args := []string{"-u", user, "env",
 			"XDG_RUNTIME_DIR=" + runtimeDir,
@@ -221,7 +215,6 @@ func buildMpvCmd(audioSrc string, user string, runtimeDir string) *exec.Cmd {
 		args = append(args, mpvArgs...)
 		return exec.Command("sudo", args...)
 	}
-
 	cmd := exec.Command("mpv", mpvArgs...)
 	cmd.Env = append(os.Environ(), "XDG_RUNTIME_DIR="+runtimeDir)
 	return cmd
@@ -248,10 +241,8 @@ func detectPkgManager() (string, string) {
 	return "", ""
 }
 
-// depName returns the correct package name per package manager
 func depName(dep, pkgManager string) string {
 	if dep == "yt-dlp" {
-		// yt-dlp is not in many distro repos; pip is the safest fallback
 		switch pkgManager {
 		case "pacman":
 			return "yt-dlp"
@@ -272,8 +263,6 @@ func checkDeps() bool {
 	}
 	for _, dep := range []string{"mpv", "yt-dlp"} {
 		if _, err := exec.LookPath(dep); err != nil {
-			_, pkgMgr := detectPkgManager()
-			_ = pkgMgr
 			mgr, _ := detectPkgManager()
 			fmt.Printf("   ❌ Missing: %s\n", dep)
 			fmt.Printf("      Install: %s %s\n", installCmd, depName(dep, mgr))
@@ -297,20 +286,24 @@ func playTrack(idx int) {
 		fmt.Println("   Invalid track number.")
 		return
 	}
-
 	if musicCmd != nil && musicCmd.Process != nil {
 		stopMusic()
 	}
 
+	// FIX 2: check deps and give clear guidance before attempting playback
+	fmt.Println("   🔍 Checking dependencies...")
 	if !checkDeps() {
+		fmt.Println()
+		fmt.Println("   ⚠️  Please install missing deps above, then try again.")
+		fmt.Println("   Tip: yt-dlp is best installed via:  pip3 install yt-dlp")
 		return
 	}
 
 	track := playlist[idx]
 	user := getEffectiveUser()
 	runtimeDir := getRuntimeDir(user)
-
 	homeDir := getMusicHome()
+
 	localPath := filepath.Join(homeDir, ".local/share/focus-symphony/assets/lofi.mp3")
 	audioSrc := track.url
 
@@ -334,7 +327,7 @@ func playTrack(idx int) {
 		out, err := ytCmd.Output()
 		if err != nil {
 			fmt.Printf("   ❌ yt-dlp failed: %v\n", err)
-			fmt.Println("   Try: yt-dlp -U  (to update)")
+			fmt.Println("   Fix: run  yt-dlp -U  to update, or  pip3 install -U yt-dlp")
 			return
 		}
 
@@ -351,7 +344,8 @@ func playTrack(idx int) {
 	musicCmd.Stderr = nil
 
 	if err := musicCmd.Start(); err != nil {
-		fmt.Printf("   ❌ mpv failed: %v\n", err)
+		fmt.Printf("   ❌ mpv failed to start: %v\n", err)
+		fmt.Println("   Fix: sudo pacman -S mpv   (or your distro's equivalent)")
 		musicCmd = nil
 		return
 	}
@@ -416,6 +410,7 @@ Commands:
   stop_music   Stop music
   rapid        25-min Pomodoro + music          [needs sudo]
   stats        Show session time + current track
+  help         Show this menu
   exit         Quit
 `)
 }
