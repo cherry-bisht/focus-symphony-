@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,51 +16,24 @@
   --warm: #fde8d0; --warm2: #fcd4ad;
   --text: #1a0f00; --text2: #6b3a1f; --muted: #a0633a; --green: #16a34a;
   font-family: 'Syne', sans-serif;
-  background: var(--bg); color: var(--text); overflow: hidden;
+  background: var(--bg); color: var(--text); overflow-x: hidden;
 }
-
-/* NAV */
-.fs-nav {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1rem 2rem; background: var(--surface);
-  border-bottom: 1px solid var(--border2); position: sticky; top: 0; z-index: 100;
-}
+.fs-nav { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: var(--surface); border-bottom: 1px solid var(--border2); position: sticky; top: 0; z-index: 100; }
 .fs-logo { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 0.82rem; color: var(--accent); letter-spacing: 0.06em; cursor: pointer; }
 .fs-nav-links { display: flex; gap: 2rem; }
-.fs-nav-links a {
-  font-family: 'Space Mono', monospace; font-size: 0.62rem;
-  text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
-  text-decoration: none; position: relative; transition: color 0.2s;
-}
+.fs-nav-links a { font-family: 'Space Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); text-decoration: none; position: relative; transition: color 0.2s; }
 .fs-nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.25s ease; }
 .fs-nav-links a:hover { color: var(--accent); }
 .fs-nav-links a:hover::after { width: 100%; }
-
-/* HERO */
-.fs-hero {
-  padding: 4rem 2rem 3rem; background: var(--bg);
-  display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
-  position: relative; overflow: hidden;
-}
-.fs-hero::before {
-  content: ''; position: absolute; inset: 0;
-  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 40px 40px; pointer-events: none;
-}
+.fs-hero { padding: 4rem 2rem 3rem; background: var(--bg); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; position: relative; overflow: hidden; }
+.fs-hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
 .fs-hero-text { position: relative; z-index: 1; }
 .fs-hero h1 { font-size: clamp(2.8rem, 7vw, 5rem); font-weight: 800; line-height: 0.92; letter-spacing: -0.04em; margin-bottom: 1.4rem; }
 .fs-hero h1 span:first-child { color: var(--text); display: block; }
 .fs-hero h1 span:last-child { color: transparent; -webkit-text-stroke: 2px var(--accent); display: block; }
 .fs-hero p { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); line-height: 1.9; max-width: 380px; margin-bottom: 1.8rem; }
 .fs-hero p strong { color: var(--accent); }
-.fs-btn {
-  font-family: 'Space Mono', monospace; font-weight: 700; font-size: 0.68rem;
-  text-transform: uppercase; letter-spacing: 0.12em; color: #fff;
-  background: var(--accent); border: none; padding: 0.75rem 1.6rem;
-  cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;
-  clip-path: polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
-  transition: background 0.2s, transform 0.15s; text-decoration: none;
-}
+.fs-btn { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: #fff; background: var(--accent); border: none; padding: 0.75rem 1.6rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; clip-path: polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px)); transition: background 0.2s, transform 0.15s; text-decoration: none; }
 .fs-btn:hover { background: var(--accent2); transform: translateY(-1px); }
 .fs-hero-stats { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border2); border: 1px solid var(--border2); }
 .fs-stat { background: var(--surface); padding: 1.4rem 1.2rem; }
@@ -69,18 +41,9 @@
 .fs-stat .value { font-size: 1.6rem; font-weight: 800; color: var(--accent); letter-spacing: -0.03em; }
 .fs-stat .sub { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--text2); margin-top: 0.2rem; }
 .fs-socials { display: flex; gap: 0.6rem; margin-top: 1.4rem; flex-wrap: wrap; }
-.fs-socials span {
-  font-family: 'Space Mono', monospace; font-size: 0.58rem; padding: 0.4rem 0.7rem;
-  color: var(--muted); border: 1px solid var(--border2); background: var(--surface);
-  cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s;
-}
+.fs-socials span { font-family: 'Space Mono', monospace; font-size: 0.58rem; padding: 0.4rem 0.7rem; color: var(--muted); border: 1px solid var(--border2); background: var(--surface); cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
 .fs-socials span:hover { background: var(--warm); color: var(--accent); border-color: var(--accent3); }
-
-/* README MODAL */
-.fs-readme-backdrop {
-  position: fixed; inset: 0; background: rgba(26,15,0,0.78);
-  z-index: 999; display: none; align-items: center; justify-content: center; padding: 1.5rem;
-}
+.fs-readme-backdrop { position: fixed; inset: 0; background: rgba(26,15,0,0.78); z-index: 999; display: none; align-items: center; justify-content: center; padding: 1.5rem; }
 .fs-readme-backdrop.open { display: flex; }
 .fs-readme-modal { background: #1a0900; border: 1px solid var(--accent); max-width: 760px; width: 100%; max-height: 86vh; display: flex; flex-direction: column; box-shadow: 10px 10px 0 var(--warm2); }
 .fs-readme-hdr { background: #2d1200; padding: 0.6rem 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid rgba(232,83,10,0.3); flex-shrink: 0; }
@@ -89,7 +52,7 @@
 .fs-readme-close:hover { color: var(--accent2); }
 .fs-readme-body { padding: 1.6rem 1.8rem; overflow-y: auto; flex: 1; font-family: 'Space Mono', monospace; font-size: 0.68rem; line-height: 1.9; color: #d4956a; scrollbar-width: thin; scrollbar-color: var(--accent) #2d1200; }
 .fs-readme-body h2 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--accent2); margin-bottom: 1.2rem; letter-spacing: -0.02em; }
-.fs-readme-body h3 { font-family: 'Space Mono', monospace; font-size: 0.65rem; font-weight: 700; color: var(--accent3); text-transform: uppercase; letter-spacing: 0.1em; margin: 1.4rem 0 0.7rem; border-top: 1px solid rgba(232,83,10,0.2); padding-top: 1rem; }
+.fs-readme-body h3 { font-family: 'Space Mono', monospace; font-size: 0.65rem; font-weight: 700; color: var(--accent3); text-transform: uppercase; letter-spacing: 0.1em; margin: 1.4rem 0 0.7rem; border-top: 1px solid rgba(232,83,10,0.2); padding-top: 1rem; display: block; }
 .fs-readme-body h3:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
 .fs-readme-body p { margin-bottom: 0.7rem; color: #c47a4a; }
 .rm-code { background: #2d1200; border: 1px solid rgba(232,83,10,0.3); border-left: 2px solid var(--accent); padding: 0.8rem 1rem; margin: 0.7rem 0; display: block; color: var(--accent2); font-size: 0.64rem; overflow-x: auto; white-space: pre; }
@@ -99,8 +62,6 @@
 .rm-badge { display: inline-block; background: rgba(232,83,10,0.15); border: 1px solid var(--accent3); color: var(--accent3); font-size: 0.56rem; padding: 0.15rem 0.5rem; margin-right: 0.4rem; text-transform: uppercase; letter-spacing: 0.08em; }
 .rm-warn { border: 1px solid #fbbf24; background: rgba(251,191,36,0.08); padding: 0.7rem 1rem; color: #fbbf24; font-size: 0.64rem; margin: 0.8rem 0; }
 .rm-warn strong { color: #fcd34d; }
-
-/* DOWNLOAD SECTION */
 .fs-download { background: var(--bg3); padding: 3rem 2rem; border-bottom: 1px solid var(--border2); }
 .fs-download h2 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; color: var(--text); }
 .fs-download > p { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); margin-bottom: 1.6rem; line-height: 1.8; }
@@ -111,19 +72,11 @@
 .fs-dl-card h4 { font-size: 0.9rem; font-weight: 700; color: var(--text); }
 .dl-file { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--accent); }
 .dl-note { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--muted); line-height: 1.7; flex: 1; margin-bottom: 0.4rem; }
-.fs-dl-btn {
-  font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em;
-  text-transform: uppercase; color: #fff; background: var(--accent); border: none;
-  padding: 0.5rem 1rem; cursor: pointer; text-decoration: none; display: inline-block;
-  clip-path: polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
-  transition: background 0.2s; align-self: flex-start;
-}
+.fs-dl-btn { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: var(--accent); border: none; padding: 0.5rem 1rem; cursor: pointer; text-decoration: none; display: inline-block; clip-path: polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px)); transition: background 0.2s; align-self: flex-start; }
 .fs-dl-btn:hover { background: var(--accent2); }
 .fs-dl-install { background: #1a0900; border: 1px solid var(--border2); padding: 0.9rem 1.2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
 .fs-dl-install .label { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; flex-shrink: 0; }
 .fs-dl-install code { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--accent2); flex: 1; overflow-x: auto; }
-
-/* TERMINAL */
 .fs-terminal { background: var(--bg2); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); padding: 3rem 2rem; }
 .fs-terminal h2 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: var(--text); }
 .fs-term-win { background: #1a0900; border: 1px solid var(--accent); max-width: 680px; margin: 0 auto; box-shadow: 6px 6px 0 var(--warm2); }
@@ -136,22 +89,6 @@
 @keyframes blink { 50% { opacity: 0; } }
 .fs-term-output { opacity: 0; transition: opacity 0.3s; }
 .fs-term-output.visible { opacity: 1; }
-
-/* MUSIC */
-.fs-music { background: var(--bg); padding: 3rem 2rem; border-bottom: 1px solid var(--border2); }
-.fs-music h2 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: var(--text); }
-.fs-playlist { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); border: 1px solid var(--border2); }
-.fs-pcard { background: var(--surface); padding: 1.6rem; transition: background 0.2s; }
-.fs-pcard:hover { background: var(--warm); }
-.fs-pcard-icon { font-size: 1.5rem; margin-bottom: 0.8rem; }
-.fs-pcard h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.3rem; color: var(--text); }
-.fs-pcard p { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.7; }
-.fs-btn-sm { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: var(--warm); border: 1px solid var(--accent3); padding: 0.4rem 0.9rem; cursor: pointer; transition: background 0.2s, color 0.2s; }
-.fs-btn-sm:hover { background: var(--accent); color: #fff; }
-.fs-btn-sm.playing { background: var(--accent); color: #fff; }
-.fs-music-note { margin-top: 1rem; font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted); border: 1px dashed var(--border2); padding: 0.7rem 1rem; background: var(--bg2); }
-
-/* FEATURES */
 .fs-features { background: var(--bg3); padding: 3rem 2rem; border-bottom: 1px solid var(--border2); }
 .fs-features h2 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: var(--text); }
 .fs-fgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); border: 1px solid var(--border2); }
@@ -160,8 +97,6 @@
 .fs-fcard-num { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--accent3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 1rem; border-top: 2px solid var(--accent); padding-top: 0.6rem; display: inline-block; }
 .fs-fcard h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
 .fs-fcard p { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted); line-height: 1.85; }
-
-/* DOCS */
 .fs-docs { background: var(--bg); padding: 3rem 2rem; border-bottom: 1px solid var(--border2); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
 .fs-docs-left h2 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.6rem; color: var(--text); }
 .fs-docs-left > p { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); line-height: 1.8; }
@@ -172,35 +107,23 @@
 .fs-steps strong { color: var(--text); }
 .fs-code { font-family: 'Space Mono', monospace; font-size: 0.62rem; background: var(--warm); color: var(--accent); padding: 0.1rem 0.4rem; border: 1px solid var(--accent3); }
 .fs-steps-divider { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--accent3); text-transform: uppercase; letter-spacing: 0.1em; padding: 0.6rem 0; border-top: 1px dashed var(--border2); margin-top: 0.3rem; }
-
-/* SPECS */
-.fs-specs { background: var(--bg2); padding: 3rem 2rem; border-bottom: 1px solid var(--border2); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.fs-specs { background: var(--bg2); padding: 3rem 2rem; border-bottom: 1px solid var(--border2); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
 .fs-specs h2 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1rem; color: var(--text); }
 .fs-specs-p { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); line-height: 1.9; margin-bottom: 1.4rem; }
 .fs-spec-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
 .fs-spec-list li { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); display: flex; align-items: center; gap: 0.6rem; }
 .fs-spec-list li .chk { display: inline-flex; width: 18px; height: 18px; align-items: center; justify-content: center; background: #dcfce7; border: 1px solid #86efac; font-size: 0.58rem; color: var(--green); flex-shrink: 0; }
-.fs-arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border2); border: 1px solid var(--border2); }
-.fs-arch-cell { background: var(--surface); padding: 1rem; display: flex; flex-direction: column; gap: 0.3rem; }
-.fs-arch-cell .label { font-family: 'Space Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
-.fs-arch-cell .val { font-size: 0.9rem; font-weight: 700; color: var(--accent); }
-.fs-arch-cell .bar { height: 4px; background: var(--warm2); border-radius: 2px; margin-top: 0.4rem; }
-.fs-arch-cell .bar-fill { height: 100%; background: var(--accent); border-radius: 2px; width: 0; transition: width 1.2s ease; }
-
-/* FOOTER */
+.fs-cmd-table { background: var(--surface); border: 1px solid var(--border2); padding: 1.4rem; font-family: 'Space Mono', monospace; }
+.fs-cmd-table .tbl-hdr { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1rem; border-bottom: 1px solid var(--border2); padding-bottom: 0.7rem; }
+.fs-cmd-row { font-size: 0.63rem; display: flex; gap: 0.8rem; margin-bottom: 0.6rem; }
+.fs-cmd-row .cmd { color: var(--accent); min-width: 90px; }
+.fs-cmd-row .desc { color: var(--muted); }
 .fs-footer { background: var(--accent); padding: 3.5rem 2rem; text-align: center; }
 .fs-footer h3 { font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.8rem; color: #fff; }
 .fs-footer p { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: rgba(255,255,255,0.75); margin-bottom: 0.5rem; line-height: 1.85; }
 .fs-footer p strong { color: #fff; }
 .fs-footer-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.6rem; }
-.fs-footer-btn {
-  font-family: 'Space Mono', monospace; font-weight: 700; font-size: 0.68rem;
-  text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent);
-  background: #fff; border: none; padding: 0.75rem 1.6rem;
-  cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;
-  clip-path: polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
-  transition: opacity 0.2s, transform 0.15s; text-decoration: none;
-}
+.fs-footer-btn { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); background: #fff; border: none; padding: 0.75rem 1.6rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; clip-path: polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px)); transition: opacity 0.2s, transform 0.15s; text-decoration: none; }
 .fs-footer-btn:hover { opacity: 0.88; transform: translateY(-1px); }
 .fs-footer-btn.outline { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,0.55); clip-path: none; }
 .fs-footer-btn.outline:hover { background: rgba(255,255,255,0.12); opacity: 1; }
@@ -209,23 +132,21 @@
 <body>
 <div class="fs">
 
-  <!-- NAV -->
   <nav class="fs-nav">
     <div class="fs-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">FOCUS-SYMPHONY</div>
     <div class="fs-nav-links">
-      <a href="#" onclick="scrollTo('hero');return false">Home</a>
-      <a href="#" onclick="scrollTo('features');return false">Instruments</a>
-      <a href="#" onclick="scrollTo('download');return false">Download</a>
-      <a href="#" onclick="scrollTo('docs');return false">Score</a>
+      <a href="#" onclick="goTo('hero');return false">Home</a>
+      <a href="#" onclick="goTo('features');return false">Instruments</a>
+      <a href="#" onclick="goTo('download');return false">Download</a>
+      <a href="#" onclick="goTo('docs');return false">Score</a>
       <a href="https://github.com/cherry-bisht/focus-symphony-" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
   </nav>
 
-  <!-- HERO -->
   <section class="fs-hero" id="sec-hero">
     <div class="fs-hero-text">
       <h1><span>FOCUS</span><span>SYMPHONY</span></h1>
-      <p>Conduct your system's resources with surgical precision. Built with <strong>Go</strong>, Focus-Symphony is an open-source CLI that blocks distractions, tunes processes, and keeps you in flow — with prebuilt binaries for every platform.</p>
+      <p>Block distractions, play focus music, and stay in flow — from your terminal. Built with <strong>Go</strong>. Works on Linux, macOS, and Windows. No extra runtime required.</p>
       <button class="fs-btn" onclick="document.getElementById('sec-download').scrollIntoView({behavior:'smooth'})">DOWNLOAD v1.0.0 &#9654;</button>
       <div class="fs-socials">
         <span onclick="window.open('https://github.com/cherry-bisht/focus-symphony-','_blank','noopener')">GITHUB</span>
@@ -242,7 +163,6 @@
     </div>
   </section>
 
-  <!-- TERMINAL -->
   <section class="fs-terminal" id="sec-terminal">
     <h2>The Conductor (Terminal CLI)</h2>
     <div class="fs-term-win">
@@ -250,128 +170,99 @@
         <span class="fs-dot" style="background:#f87171"></span>
         <span class="fs-dot" style="background:#fbbf24"></span>
         <span class="fs-dot" style="background:#4ade80"></span>
-        <span class="fs-term-title">focus-symphony --tui</span>
+        <span class="fs-term-title">focus-symphony</span>
       </div>
       <div class="fs-term-body"></div>
     </div>
   </section>
 
-  <!-- DOWNLOAD -->
   <section class="fs-download" id="sec-download">
     <h2>Download Prebuilt Binary</h2>
-    <p>No Go installation required. Grab the binary for your platform, make it executable, and run. <strong>Site-blocking requires sudo</strong> — everything else works without it.</p>
+    <p>No Go installation required. Grab the binary for your platform and run. <strong>Site-blocking requires sudo</strong> — music and stats work without it.</p>
     <div class="fs-dl-grid">
       <div class="fs-dl-card">
         <div class="dl-os">🐧</div>
         <h4>Linux</h4>
         <div class="dl-file">focus-symphony-linux</div>
-        <div class="dl-note">x86_64 · Arch, Ubuntu, Debian, Fedora. Site-blocking modifies /etc/hosts and requires sudo.</div>
+        <div class="dl-note">x86_64 · Arch, Ubuntu, Debian, Fedora. Use install.sh to set up mpv + yt-dlp automatically.</div>
         <a class="fs-dl-btn" href="https://github.com/cherry-bisht/focus-symphony-/releases/download/v1.0.0/focus-symphony-linux" target="_blank" rel="noopener">↓ DOWNLOAD</a>
       </div>
       <div class="fs-dl-card">
         <div class="dl-os">🍎</div>
         <h4>macOS</h4>
         <div class="dl-file">focus-symphony-mac</div>
-        <div class="dl-note">x86_64 · Intel Macs. Apple Silicon: build from source. Site-blocking requires sudo.</div>
+        <div class="dl-note">x86_64 · Intel Macs. Apple Silicon: build from source. Requires mpv + yt-dlp via Homebrew.</div>
         <a class="fs-dl-btn" href="https://github.com/cherry-bisht/focus-symphony-/releases/download/v1.0.0/focus-symphony-mac" target="_blank" rel="noopener">↓ DOWNLOAD</a>
       </div>
       <div class="fs-dl-card">
         <div class="dl-os">🪟</div>
         <h4>Windows</h4>
         <div class="dl-file">focus-symphony.exe</div>
-        <div class="dl-note">x86_64 · WSL not fully supported (audio + /etc/hosts). Use native Windows or Linux.</div>
+        <div class="dl-note">x86_64 · Admin required for site-blocking. WSL not fully supported — use native Linux.</div>
         <a class="fs-dl-btn" href="https://github.com/cherry-bisht/focus-symphony-/releases/download/v1.0.0/focus-symphony.exe" target="_blank" rel="noopener">↓ DOWNLOAD</a>
       </div>
     </div>
     <div class="fs-dl-install">
-      <span class="label">One-line (Linux/Mac):</span>
-      <code>wget https://github.com/cherry-bisht/focus-symphony-/releases/download/v1.0.0/focus-symphony-linux &amp;&amp; chmod +x focus-symphony-linux &amp;&amp; sudo mv focus-symphony-linux /usr/local/bin/focus-symphony</code>
+      <span class="label">Recommended (Linux/Mac):</span>
+      <code>chmod +x install.sh &amp;&amp; ./install.sh</code>
     </div>
   </section>
 
-  <!-- MUSIC -->
-  <section class="fs-music" id="sec-music">
-    <h2>Focus Playlists</h2>
-    <div class="fs-playlist">
-      <div class="fs-pcard">
-        <div class="fs-pcard-icon">&#127925;</div>
-        <h4>Lofi Coding</h4>
-        <p>Chill beats for deep focus.</p>
-        <button class="fs-btn-sm" data-track="lofi">&#9654; PLAY</button>
-      </div>
-      <div class="fs-pcard">
-        <div class="fs-pcard-icon">&#9000;</div>
-        <h4>Mechanical Rhythm</h4>
-        <p>Typing sounds and ambient noise.</p>
-        <button class="fs-btn-sm" data-track="mech">&#9654; PLAY</button>
-      </div>
-      <div class="fs-pcard">
-        <div class="fs-pcard-icon">&#127783;</div>
-        <h4>Arch Rain</h4>
-        <p>White noise for isolation.</p>
-        <button class="fs-btn-sm" data-track="rain">&#9654; PLAY</button>
-      </div>
-    </div>
-    <div class="fs-music-note">ℹ️ &nbsp;Music plays in the terminal. Run <span class="fs-code">focus-symphony music</span> to launch the built-in TUI player. Web audio preview coming in v1.1.</div>
-  </section>
-
-  <!-- FEATURES -->
   <section class="fs-features" id="sec-features">
     <h2>The Instruments</h2>
     <div class="fs-fgrid">
-      <div class="fs-fcard"><div class="fs-fcard-num">01 — Orchestrator</div><h4>The Orchestrator</h4><p>A high-concurrency Go engine that balances system threads to ensure your focus apps never skip a beat.</p></div>
-      <div class="fs-fcard"><div class="fs-fcard-num">02 — Shield</div><h4>Acoustic Shield</h4><p>Blocks distracting sites via /etc/hosts during sessions. Run with sudo to activate. Cleans up automatically on stop.</p></div>
-      <div class="fs-fcard"><div class="fs-fcard-num">03 — Rhythm</div><h4>Visual Rhythm</h4><p>Real-time system telemetry through a clean, rhythmic TUI dashboard designed for minimal distraction.</p></div>
+      <div class="fs-fcard"><div class="fs-fcard-num">01 — Shield</div><h4>Acoustic Shield</h4><p>Blocks YouTube, Reddit, and Twitter/X via /etc/hosts. Type <code style="font-size:0.6rem;background:var(--warm);padding:0.1rem 0.3rem;border:1px solid var(--accent3)">start</code> — auto-prompts for sudo inline. Cleans up on stop.</p></div>
+      <div class="fs-fcard"><div class="fs-fcard-num">02 — Music</div><h4>Terminal Music Player</h4><p>Streams focus playlists via yt-dlp + mpv. Falls back to local lofi.mp3 if available. Pick tracks by number. Runs in the background.</p></div>
+      <div class="fs-fcard"><div class="fs-fcard-num">03 — Pomodoro</div><h4>Rapid Focus Mode</h4><p>Type <code style="font-size:0.6rem;background:var(--warm);padding:0.1rem 0.3rem;border:1px solid var(--accent3)">rapid</code> for a 25-min Pomodoro — activates the shield and starts music in one shot.</p></div>
     </div>
   </section>
 
-  <!-- DOCS -->
   <section class="fs-docs" id="sec-docs">
     <div class="fs-docs-left">
       <h2>The Score</h2>
-      <p>Two ways in — grab a prebuilt binary (recommended, no Go needed) or build from source. Click README above for the full guide.</p>
+      <p>Use install.sh for the easiest setup — it detects your distro and handles dependencies automatically. Or build from source if you prefer full control.</p>
     </div>
     <div class="fs-docs-right">
-      <h3>Quick Start — Prebuilt Binary</h3>
+      <h3>Quick Start — install.sh</h3>
       <ol class="fs-steps">
-        <li><div><strong>Download</strong> your platform's binary from the <a href="https://github.com/cherry-bisht/focus-symphony-/releases/tag/v1.0.0" target="_blank" rel="noopener" style="color:var(--accent)">v1.0.0 release ↗</a></div></li>
-        <li><div><strong>Make executable:</strong> <span class="fs-code">chmod +x focus-symphony-linux</span></div></li>
-        <li><div><strong>Run:</strong> <span class="fs-code">./focus-symphony</span> &nbsp;or with site-blocking: <span class="fs-code">sudo ./focus-symphony start</span></div></li>
-        <li><div><strong>Global install:</strong> <span class="fs-code">sudo mv focus-symphony-linux /usr/local/bin/focus-symphony</span></div></li>
+        <li><div><strong>Clone:</strong> <span class="fs-code">git clone https://github.com/cherry-bisht/focus-symphony-.git</span></div></li>
+        <li><div><strong>Install:</strong> <span class="fs-code">chmod +x install.sh &amp;&amp; ./install.sh</span> — installs deps + binary</div></li>
+        <li><div><strong>Run:</strong> <span class="fs-code">focus-symphony</span> — type <span class="fs-code">help</span> to see commands</div></li>
       </ol>
       <div class="fs-steps-divider">— or build from source (Go required) —</div>
       <ol class="fs-steps" style="margin-top:0.9rem; counter-reset:s">
-        <li><div><strong>Clone:</strong> <span class="fs-code">git clone https://github.com/cherry-bisht/focus-symphony-.git</span></div></li>
         <li><div><strong>Build:</strong> <span class="fs-code">go build -o focus-symphony main.go</span></div></li>
-        <li><div><strong>Run:</strong> <span class="fs-code">./focus-symphony start</span></div></li>
+        <li><div><strong>Run:</strong> <span class="fs-code">./focus-symphony</span> — sudo is prompted automatically when needed</div></li>
       </ol>
     </div>
   </section>
 
-  <!-- SPECS -->
   <section class="fs-specs" id="sec-specs">
     <div>
-      <h2>A Modern Composition</h2>
-      <p class="fs-specs-p">Focus-Symphony treats your kernel like a concert hall. By tapping directly into the <span class="fs-code">/proc</span> filesystem, it achieves near-zero latency with a whisper-quiet footprint.</p>
+      <h2>What's Under the Hood</h2>
+      <p class="fs-specs-p">A single compiled Go binary. No runtime, no daemon, no background service. Only does what you ask it to do.</p>
       <ul class="fs-spec-list">
-        <li><span class="chk">✓</span> Compiled Go — zero runtime dependencies</li>
+        <li><span class="chk">✓</span> Single Go binary — no runtime deps</li>
         <li><span class="chk">✓</span> Cross-platform — Linux, macOS, Windows</li>
-        <li><span class="chk">✓</span> Site-blocking via /etc/hosts (sudo)</li>
-        <li><span class="chk">✓</span> Dynamic resource tuning</li>
-        <li><span class="chk">✓</span> Native Arch Linux optimized</li>
+        <li><span class="chk">✓</span> Cross-distro — apt, dnf, pacman, brew, apk</li>
+        <li><span class="chk">✓</span> Site-blocking via /etc/hosts (auto sudo)</li>
+        <li><span class="chk">✓</span> Music via mpv + yt-dlp or local file</li>
+        <li><span class="chk">✓</span> MIT licensed — fork freely</li>
       </ul>
     </div>
-    <div>
-      <div class="fs-arch-grid">
-        <div class="fs-arch-cell"><div class="label">CPU Usage</div><div class="val">2.1%</div><div class="bar"><div class="bar-fill" style="width:21%"></div></div></div>
-        <div class="fs-arch-cell"><div class="label">Memory</div><div class="val">18MB</div><div class="bar"><div class="bar-fill" style="width:18%"></div></div></div>
-        <div class="fs-arch-cell"><div class="label">Latency</div><div class="val">&lt;1ms</div><div class="bar"><div class="bar-fill" style="width:8%"></div></div></div>
-        <div class="fs-arch-cell"><div class="label">Threads</div><div class="val">4</div><div class="bar"><div class="bar-fill" style="width:40%"></div></div></div>
-      </div>
+    <div class="fs-cmd-table">
+      <div class="tbl-hdr">Available Commands</div>
+      <div class="fs-cmd-row"><span class="cmd">start</span><span class="desc">Block sites + begin session</span></div>
+      <div class="fs-cmd-row"><span class="cmd">stop</span><span class="desc">Unblock sites + end session</span></div>
+      <div class="fs-cmd-row"><span class="cmd">music</span><span class="desc">Play a random focus track</span></div>
+      <div class="fs-cmd-row"><span class="cmd">playlist</span><span class="desc">List tracks (type 1–5 to pick)</span></div>
+      <div class="fs-cmd-row"><span class="cmd">stop_music</span><span class="desc">Stop playback</span></div>
+      <div class="fs-cmd-row"><span class="cmd">rapid</span><span class="desc">25-min Pomodoro + music</span></div>
+      <div class="fs-cmd-row"><span class="cmd">stats</span><span class="desc">Session time + now playing</span></div>
+      <div class="fs-cmd-row"><span class="cmd">exit</span><span class="desc">Quit gracefully</span></div>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="fs-footer" id="sec-footer">
     <h3>Ready to tune your system?</h3>
     <p>Download the latest release and orchestrate your perfect workflow.</p>
@@ -395,79 +286,75 @@
     </div>
     <div class="fs-readme-body">
       <h2>🎵 Focus Symphony</h2>
-      <p>A compiled Go CLI that helps you enter deep focus mode — blocking distracting sites, tuning system processes, and piping ambient audio. All from your terminal.</p>
-      <p><span class="rm-badge">v1.0.0</span><span class="rm-badge">Go</span><span class="rm-badge">MIT</span><span class="rm-badge">Arch Native</span><span class="rm-badge">Cross-Platform</span></p>
+      <p>A compiled Go CLI that helps you enter deep focus mode — blocking distracting sites, streaming ambient music, and running Pomodoro sessions. All from your terminal.</p>
+      <p><span class="rm-badge">v1.0.0</span><span class="rm-badge">Go</span><span class="rm-badge">MIT</span><span class="rm-badge">Cross-Platform</span><span class="rm-badge">Cross-Distro</span></p>
 
-      <h3>What's in v1.0.0</h3>
+      <h3>What it does</h3>
       <ul>
-        <li>Prebuilt binary for <strong>Linux</strong> (x86_64)</li>
-        <li>Prebuilt binary for <strong>macOS</strong> (Intel x86_64)</li>
-        <li>Prebuilt binary for <strong>Windows</strong> (x86_64)</li>
-        <li>Focus session manager — blocks sites via <strong>/etc/hosts</strong></li>
-        <li>Built-in terminal music player</li>
-        <li>TUI dashboard for real-time system telemetry</li>
-        <li>No Go installation required for end users</li>
+        <li><strong>Acoustic Shield</strong> — blocks YouTube, Reddit, Twitter/X via /etc/hosts</li>
+        <li><strong>Music Player</strong> — streams focus playlists via yt-dlp + mpv (or local lofi.mp3)</li>
+        <li><strong>Rapid Focus</strong> — one command starts a 25-min Pomodoro + music</li>
+        <li><strong>Session Stats</strong> — shows focus time + currently playing track</li>
+        <li><strong>Auto sudo</strong> — typing <code>start</code> prompts for password inline, no restart needed</li>
       </ul>
 
-      <h3>Quick Install — Linux / Arch</h3>
-      <span class="rm-code">wget https://github.com/cherry-bisht/focus-symphony-/releases/download/v1.0.0/focus-symphony-linux
-chmod +x focus-symphony-linux
-sudo mv focus-symphony-linux /usr/local/bin/focus-symphony
-focus-symphony</span>
+      <h3>Install (Recommended)</h3>
+      <p>The installer detects your package manager and installs <strong>mpv</strong> and <strong>yt-dlp</strong> automatically:</p>
+      <span class="rm-code">git clone https://github.com/cherry-bisht/focus-symphony-.git
+cd focus-symphony-
+chmod +x install.sh && ./install.sh</span>
+      <p>Supports: <strong>pacman</strong> (Arch), <strong>apt</strong> (Ubuntu/Debian), <strong>dnf</strong> (Fedora), <strong>brew</strong> (macOS), <strong>zypper</strong>, <strong>apk</strong>.</p>
 
-      <h3>Quick Install — macOS</h3>
-      <span class="rm-code">wget https://github.com/cherry-bisht/focus-symphony-/releases/download/v1.0.0/focus-symphony-mac
-chmod +x focus-symphony-mac
-sudo mv focus-symphony-mac /usr/local/bin/focus-symphony
-focus-symphony</span>
+      <h3>Manual Install</h3>
+      <span class="rm-code">go build -o focus-symphony main.go
+mv focus-symphony ~/.local/bin/
 
-      <h3>Quick Install — Windows</h3>
-      <p>Download <strong>focus-symphony.exe</strong> from the releases page and run directly:</p>
-      <span class="rm-code">.\focus-symphony.exe</span>
+# Optional: local music fallback
+mkdir -p ~/.local/share/focus-symphony/assets
+cp assets/lofi.mp3 ~/.local/share/focus-symphony/assets/</span>
 
       <h3>Commands</h3>
-      <span class="rm-code">focus-symphony            # launch TUI
-focus-symphony start      # begin focus session (blocks sites — needs sudo)
-focus-symphony stop       # end focus session
-focus-symphony music      # launch terminal music player
-focus-symphony help       # show all commands</span>
+      <span class="rm-code">start        Block distracting sites     [auto-prompts sudo]
+stop         Unblock sites               [auto-prompts sudo]
+music        Play a random focus track
+playlist     List tracks (type 1-5 to pick)
+stop_music   Stop music
+rapid        25-min Pomodoro + music     [auto-prompts sudo]
+stats        Session time + now playing
+exit         Quit</span>
 
-      <h3>Privilege Notes</h3>
+      <h3>A note on sudo</h3>
+      <p>Site-blocking modifies <strong>/etc/hosts</strong> and requires root. If you run without sudo and type <strong>start</strong>, the app automatically re-launches with sudo inline — just enter your password and continue. No need to close and reopen.</p>
+
+      <h3>Dependencies</h3>
       <ul>
-        <li><strong>Normal usage</strong> (TUI, music, telemetry) — no sudo needed.</li>
-        <li><strong>Site-blocking</strong> — requires sudo, modifies <strong>/etc/hosts</strong>.</li>
+        <li><strong>mpv</strong> — audio playback engine</li>
+        <li><strong>yt-dlp</strong> — resolves YouTube stream URLs</li>
       </ul>
-      <span class="rm-code">sudo focus-symphony start   # with site-blocking enabled</span>
+      <span class="rm-code">pip3 install yt-dlp   # recommended — stays up to date</span>
 
-      <h3>Platform Compatibility</h3>
+      <h3>Platform Notes</h3>
       <ul>
-        <li>✓ &nbsp;Linux — Arch, Ubuntu, Debian, Fedora (native /proc support)</li>
-        <li>✓ &nbsp;macOS — Intel x86_64</li>
-        <li>✓ &nbsp;Windows — x86_64</li>
-        <li>⚠ &nbsp;WSL — <strong>partial only</strong>. Audio and /etc/hosts behavior differ under WSL.</li>
-        <li>⚠ &nbsp;Apple Silicon — build from source until arm64 binary is shipped.</li>
+        <li>✓ Linux — Arch, Ubuntu, Debian, Fedora (fully supported)</li>
+        <li>✓ macOS — Intel x86_64 (brew install mpv yt-dlp)</li>
+        <li>✓ Windows — x86_64 (admin required for site-blocking)</li>
+        <li>⚠ Apple Silicon — build from source (no arm64 binary yet)</li>
       </ul>
-      <div class="rm-warn"><strong>⚠ WSL Users:</strong> Site-blocking and audio are not fully supported under WSL due to how it handles /etc/hosts and the audio subsystem. Use native Linux for the full experience.</div>
+      <div class="rm-warn"><strong>⚠ WSL:</strong> Audio and /etc/hosts behaviour differ under WSL. Use native Linux for the full experience.</div>
 
-      <h3>Build From Source</h3>
+      <h3>Build from source</h3>
       <span class="rm-code">git clone https://github.com/cherry-bisht/focus-symphony-.git
 cd focus-symphony-
 go build -o focus-symphony main.go
 ./focus-symphony</span>
 
-      <h3>Cross-Compile</h3>
-      <span class="rm-code">GOOS=linux   GOARCH=amd64 go build -o focus-symphony-linux main.go
-GOOS=darwin  GOARCH=amd64 go build -o focus-symphony-mac main.go
-GOOS=windows GOARCH=amd64 go build -o focus-symphony.exe main.go</span>
-
       <h3>Contributing</h3>
-      <p>PRs and issues welcome at <strong>github.com/cherry-bisht/focus-symphony-</strong>. Built by <strong>BISHT</strong> x <strong>FLAVOURTOWN</strong>.</p>
+      <p>PRs and issues welcome at <strong>github.com/cherry-bisht/focus-symphony-</strong>. Built by <strong>BISHT</strong> × <strong>FLAVOURTOWN</strong>.</p>
     </div>
   </div>
 </div>
 
 <script>
-/* modal close on backdrop click */
 document.getElementById('readme-modal').addEventListener('click', function(e) {
   if (e.target === this) this.classList.remove('open');
 });
@@ -475,46 +362,26 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') document.getElementById('readme-modal').classList.remove('open');
 });
 
-/* nav smooth scroll helper */
-function scrollTo(id) {
+function goTo(id) {
   var el = document.getElementById('sec-' + id);
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/* music player UI toggle */
-function initMusicPlayer() {
-  var buttons = document.querySelectorAll('.fs-btn-sm[data-track]');
-  var currentPlaying = null;
-  buttons.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var track = btn.dataset.track;
-      if (currentPlaying === track) {
-        btn.innerHTML = '&#9654; PLAY';
-        btn.classList.remove('playing');
-        currentPlaying = null;
-        return;
-      }
-      buttons.forEach(function(b) { b.innerHTML = '&#9654; PLAY'; b.classList.remove('playing'); });
-      btn.innerHTML = '&#9646;&#9646; PAUSE';
-      btn.classList.add('playing');
-      currentPlaying = track;
-    });
-  });
-}
-
-/* terminal animation */
 function initTerminal() {
   var body = document.querySelector('.fs-term-body');
   if (!body) return;
   var lines = [
     { type: 'ascii', text: '  ____ ___ ____  _   _ _____ \n | __ )_ _/ ___|| | | |_   _|\n |  _ \\| |\\___ \\| |_| | | |  \n | |_) | | ___) |  _  | | |  \n |____/___|____/|_| |_| |_|  ' },
-    { type: 'plain', text: 'v1.0.0 — prebuilt binaries now available' },
+    { type: 'plain', text: 'FOCUS-SYMPHONY v1.0.0' },
+    { type: 'plain', text: "Type 'help' to see available commands." },
     { type: 'prompt', text: 'help' },
-    { type: 'plain', text: 'Available Commands:' },
-    { type: 'indent', text: 'start  — Begin focus session (blocks sites, needs sudo)' },
-    { type: 'indent', text: 'stop   — End the focus session' },
-    { type: 'indent', text: 'music  — Launch terminal music player' },
-    { type: 'indent', text: 'exit   — Close Focus-Symphony' },
+    { type: 'plain', text: 'Commands:' },
+    { type: 'indent', text: 'start        Block distracting sites     [auto sudo]' },
+    { type: 'indent', text: 'stop         Unblock sites               [auto sudo]' },
+    { type: 'indent', text: 'music        Play a random focus track' },
+    { type: 'indent', text: 'rapid        25-min Pomodoro + music     [auto sudo]' },
+    { type: 'indent', text: 'stats        Session time + now playing' },
+    { type: 'indent', text: 'exit         Quit' },
   ];
   body.innerHTML = '';
   function buildLine(line) {
@@ -535,38 +402,14 @@ function initTerminal() {
   lines.forEach(function(line, i) {
     var el = buildLine(line);
     body.appendChild(el);
-    setTimeout(function() { el.classList.add('visible'); }, 300 + i * 200);
+    setTimeout(function() { el.classList.add('visible'); }, 300 + i * 180);
   });
   var cursorEl = document.createElement('div');
   cursorEl.innerHTML = '<span class="prompt">fs &gt;</span> <span class="cursor"></span>';
-  setTimeout(function() { body.appendChild(cursorEl); }, 300 + lines.length * 200);
-}
-
-/* stat bars on scroll */
-function initStatBars() {
-  var fills = document.querySelectorAll('.bar-fill');
-  if (!fills.length) return;
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        var fill = entry.target;
-        var target = fill.dataset.width;
-        fill.style.width = '0';
-        requestAnimationFrame(function() { fill.style.width = target; });
-        observer.unobserve(fill);
-      }
-    });
-  }, { threshold: 0.3 });
-  fills.forEach(function(fill) {
-    fill.dataset.width = fill.style.width;
-    fill.style.width = '0';
-    observer.observe(fill);
-  });
+  setTimeout(function() { body.appendChild(cursorEl); }, 300 + lines.length * 180);
 }
 
 initTerminal();
-initMusicPlayer();
-initStatBars();
 </script>
 </body>
 </html>
