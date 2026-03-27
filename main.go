@@ -98,10 +98,22 @@ func main() {
 	}
 }
 
+func relaunchWithSudo() {
+	fmt.Println("   🔑 'start' requires elevated privileges. Re-launching with sudo...")
+	args := append([]string{os.Args[0]}, os.Args[1:]...)
+	cmd := exec.Command("sudo", args...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		fmt.Printf("   ❌ sudo failed: %v\n", err)
+	}
+	os.Exit(0)
+}
+
 func startSession() {
 	if os.Getuid() != 0 {
-		fmt.Println("   ❌ ERROR: 'start' requires sudo.")
-		fmt.Println("   Run: sudo focus-symphony")
+		relaunchWithSudo()
 		return
 	}
 	fmt.Println("⚡ Activating Acoustic Shield...")
@@ -129,7 +141,7 @@ func startSession() {
 func stopSession() {
 	if isShieldActive {
 		if os.Getuid() != 0 {
-			fmt.Println("   ❌ ERROR: 'stop' requires sudo.")
+			relaunchWithSudo()
 			return
 		}
 		fmt.Println("⚡ Deactivating Acoustic Shield...")
@@ -215,11 +227,56 @@ func buildMpvCmd(audioSrc string, user string, runtimeDir string) *exec.Cmd {
 	return cmd
 }
 
+func detectPkgManager() (string, string) {
+	type pm struct {
+		bin    string
+		prefix string
+	}
+	managers := []pm{
+		{"pacman", "sudo pacman -S"},
+		{"apt-get", "sudo apt-get install -y"},
+		{"dnf", "sudo dnf install -y"},
+		{"brew", "brew install"},
+		{"zypper", "sudo zypper install"},
+		{"apk", "sudo apk add"},
+	}
+	for _, m := range managers {
+		if _, err := exec.LookPath(m.bin); err == nil {
+			return m.bin, m.prefix
+		}
+	}
+	return "", ""
+}
+
+// depName returns the correct package name per package manager
+func depName(dep, pkgManager string) string {
+	if dep == "yt-dlp" {
+		// yt-dlp is not in many distro repos; pip is the safest fallback
+		switch pkgManager {
+		case "pacman":
+			return "yt-dlp"
+		case "brew":
+			return "yt-dlp"
+		default:
+			return "yt-dlp  # or: pip3 install yt-dlp"
+		}
+	}
+	return dep
+}
+
 func checkDeps() bool {
 	ok := true
+	_, installCmd := detectPkgManager()
+	if installCmd == "" {
+		installCmd = "<your-package-manager>"
+	}
 	for _, dep := range []string{"mpv", "yt-dlp"} {
 		if _, err := exec.LookPath(dep); err != nil {
-			fmt.Printf("   ❌ Missing: %s  →  sudo pacman -S %s\n", dep, dep)
+			_, pkgMgr := detectPkgManager()
+			_ = pkgMgr
+			mgr, _ := detectPkgManager()
+			fmt.Printf("   ❌ Missing: %s\n", dep)
+			fmt.Printf("      Install: %s %s\n", installCmd, depName(dep, mgr))
 			ok = false
 		}
 	}
