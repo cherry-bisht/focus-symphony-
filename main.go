@@ -7,17 +7,42 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
 
-const hostsPath = "/etc/hosts"
+func getHostsPath() string {
+	if runtime.GOOS == "windows" {
+		return "C:\\Windows\\System32\\drivers\\etc\\hosts"
+	}
+	return "/etc/hosts"
+}
+
 const blockMarker = "# FOCUS-SYMPHONY-BLOCK"
 
+var hostsPath = getHostsPath()
+
 var sitesToBlock = []string{
-	"www.youtube.com", "youtube.com",
-	"www.reddit.com", "reddit.com",
-	"www.twitter.com", "twitter.com", "x.com",
+	"youtube.com",
+	"www.youtube.com",
+	"m.youtube.com",
+	"youtu.be",
+	"reddit.com",
+	"www.reddit.com",
+	"old.reddit.com",
+	"new.reddit.com",
+	"twitter.com",
+	"www.twitter.com",
+	"mobile.twitter.com",
+	"x.com",
+	"www.x.com",
+	"mobile.x.com",
+	"facebook.com",
+	"www.facebook.com",
+	"m.facebook.com",
+	"instagram.com",
+	"www.instagram.com",
 }
 
 var playlist = []struct {
@@ -45,10 +70,24 @@ func main() {
  | |_) | | ___) |  _  | | |  
  |____/___|____/|_| |_| |_|  
                                `)
-	fmt.Println("FOCUS-SYMPHONY v1.6.0 (yt-dlp Audio Engine)")
+	fmt.Println("FOCUS-SYMPHONY v1.7.0 (Production Ready)")
 	fmt.Println("--------------------------------------------")
 	fmt.Println()
 	showHelp() // FIX 1: show help menu on startup
+
+	// Ensure cleanup on exit
+	defer func() {
+		if isShieldActive {
+			if runtime.GOOS != "windows" && os.Getuid() != 0 {
+				return // Can't clean up without privileges
+			}
+			fmt.Println("\n🧹 Cleaning up...")
+			cleanHosts()
+		}
+		if musicCmd != nil && musicCmd.Process != nil {
+			stopMusic()
+		}
+	}()
 
 	reader := bufio.NewReader(os.Stdin)
 	for {
@@ -96,6 +135,13 @@ func main() {
 }
 
 func relaunchWithSudo() {
+	if runtime.GOOS == "windows" {
+		fmt.Println("   ⚠️  Windows: Please run this program as Administrator.")
+		fmt.Println("   Right-click the .exe and select 'Run as administrator'")
+		os.Exit(1)
+		return
+	}
+	
 	fmt.Println("   🔑 'start' requires elevated privileges. Re-launching with sudo...")
 	args := append([]string{os.Args[0]}, os.Args[1:]...)
 	cmd := exec.Command("sudo", args...)
@@ -109,61 +155,142 @@ func relaunchWithSudo() {
 }
 
 func startSession() {
-	if os.Getuid() != 0 {
+	// Check for admin/root privileges
+	if runtime.GOOS == "windows" {
+		// On Windows, try to open the hosts file to check permissions
+		f, err := os.OpenFile(hostsPath, os.O_RDONLY, 0)
+		if err != nil {
+			relaunchWithSudo()
+			return
+		}
+		f.Close()
+	} else if os.Getuid() != 0 {
 		relaunchWithSudo()
 		return
 	}
+	
 	fmt.Println("⚡ Activating Acoustic Shield...")
+	
+	// Warn about DNS over HTTPS
+	checkDNSoverHTTPS()
+	
+	// Clean any existing blocks first
 	cleanHosts()
+	
+	// Verify hosts file is readable
+	if _, err := os.Stat(hostsPath); err != nil {
+		fmt.Printf("   ❌ Cannot access hosts file: %v\n", err)
+		return
+	}
+	
 	isShieldActive = true
 	sessionStart = time.Now()
+	
+	// Open hosts file for appending
 	f, err := os.OpenFile(hostsPath, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
-		fmt.Printf("   ❌ Error: %v\n", err)
+		fmt.Printf("   ❌ Error opening hosts file: %v\n", err)
+		if runtime.GOOS == "windows" {
+			fmt.Println("   💡 Make sure you're running as Administrator!")
+		}
 		return
 	}
 	defer f.Close()
+	
+	// Add block marker and entries
 	fmt.Fprintln(f, blockMarker)
+	blockedCount := 0
 	for _, site := range sitesToBlock {
-		fmt.Fprintf(f, "127.0.0.1 %s\n", site)
-		fmt.Fprintf(f, "::1       %s\n", site)
+		// Add both IPv4 and IPv6 entries for maximum compatibility
+		fmt.Fprintf(f, "127.0.0.1       %s\n", site)
+		fmt.Fprintf(f, "::1             %s\n", site)
+		blockedCount++
 	}
 	fmt.Fprintln(f, blockMarker)
-	fmt.Println("✅ Sites blocked. Deep work mode active.")
+	
+	fmt.Printf("✅ %d sites blocked. Deep work mode active.\n", blockedCount)
+	fmt.Println()
+	fmt.Println("   ⚠️  IMPORTANT: Restart your browser for blocking to take effect!")
+	fmt.Println("   💡 If sites aren't blocked, disable 'Secure DNS' in browser settings.")
+	fmt.Println()
 	fmt.Println("   Tip: type 'music' to start your focus playlist")
 }
 
 func stopSession() {
-	if isShieldActive {
-		if os.Getuid() != 0 {
-			relaunchWithSudo()
-			return
-		}
-		fmt.Println("⚡ Deactivating Acoustic Shield...")
-		cleanHosts()
-		isShieldActive = false
-		fmt.Println("✅ World access restored.")
-	} else {
-		fmt.Println("   (No active shield to stop.)")
+	if !isShieldActive {
+		fmt.Println("   ℹ️  No active shield to stop.")
+		return
 	}
+	
+	// Check for admin/root privileges
+	if runtime.GOOS != "windows" && os.Getuid() != 0 {
+		relaunchWithSudo()
+		return
+	}
+	
+	fmt.Println("⚡ Deactivating Acoustic Shield...")
+	
+	// Clean the hosts file
+	cleanHosts()
+	
+	isShieldActive = false
+	
+	// Show session summary
+	if !sessionStart.IsZero() {
+		duration := time.Since(sessionStart).Round(time.Second)
+		fmt.Printf("✅ Shield deactivated. Focus session lasted: %s\n", duration)
+	} else {
+		fmt.Println("✅ Shield deactivated.")
+	}
+	
+	fmt.Println()
+	fmt.Println("   ⚠️  IMPORTANT: Restart your browser to restore access to sites.")
+	fmt.Println()
 }
 
 func cleanHosts() {
-	input, _ := os.ReadFile(hostsPath)
+	input, err := os.ReadFile(hostsPath)
+	if err != nil {
+		fmt.Printf("   ❌ Failed to read hosts file: %v\n", err)
+		return
+	}
+	
 	lines := strings.Split(string(input), "\n")
 	var newLines []string
-	isBlocking := false
+	inBlockSection := false
+	
 	for _, line := range lines {
 		trimmed := strings.TrimSpace(line)
+		
+		// Toggle block section when we see the marker
 		if trimmed == blockMarker {
-			isBlocking = !isBlocking
+			inBlockSection = !inBlockSection
 			continue
 		}
-		if !isBlocking && trimmed != "" {
-			newLines = append(newLines, line)
+		
+		// Skip lines inside block sections
+		if inBlockSection {
+			continue
 		}
+		
+		// Keep all other lines (including empty ones to preserve formatting)
+		newLines = append(newLines, line)
 	}
-	os.WriteFile(hostsPath, []byte(strings.Join(newLines, "\n")+"\n"), 0644)
+	
+	// Remove trailing empty lines but keep at least one newline at end
+	for len(newLines) > 0 && strings.TrimSpace(newLines[len(newLines)-1]) == "" {
+		newLines = newLines[:len(newLines)-1]
+	}
+	
+	output := strings.Join(newLines, "\n")
+	if !strings.HasSuffix(output, "\n") {
+		output += "\n"
+	}
+	
+	err = os.WriteFile(hostsPath, []byte(output), 0644)
+	if err != nil {
+		fmt.Printf("   ❌ Failed to write hosts file: %v\n", err)
+	}
 }
 
 func getEffectiveUser() string {
@@ -398,6 +525,33 @@ func showStats() {
 	if currentTrack != "" {
 		fmt.Printf("🎵 NOW PLAYING: %s\n", currentTrack)
 	}
+}
+
+func checkDNSoverHTTPS() {
+	fmt.Println()
+	fmt.Println("╔═══════════════════════════════════════════════════════════════════╗")
+	fmt.Println("║  ⚠️  DNS OVER HTTPS (DoH) WARNING                                 ║")
+	fmt.Println("╚═══════════════════════════════════════════════════════════════════╝")
+	fmt.Println()
+	fmt.Println("   This tool blocks sites by modifying your system's hosts file.")
+	fmt.Println("   However, if your browser uses 'Secure DNS' (DNS over HTTPS),")
+	fmt.Println("   it will BYPASS the hosts file and blocking WON'T WORK.")
+	fmt.Println()
+	fmt.Println("   📌 TO FIX THIS:")
+	fmt.Println()
+	fmt.Println("   Chrome/Edge/Brave:")
+	fmt.Println("   → Settings → Privacy and Security → Security")
+	fmt.Println("   → Turn OFF 'Use secure DNS'")
+	fmt.Println()
+	fmt.Println("   Firefox:")
+	fmt.Println("   → Settings → Privacy & Security")
+	fmt.Println("   → Scroll to 'DNS over HTTPS'")
+	fmt.Println("   → Select 'Off' or 'Default'")
+	fmt.Println()
+	fmt.Println("   After disabling, RESTART your browser completely.")
+	fmt.Println()
+	fmt.Println("╚═══════════════════════════════════════════════════════════════════╝")
+	fmt.Println()
 }
 
 func showHelp() {

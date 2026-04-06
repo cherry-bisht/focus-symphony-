@@ -1,0 +1,124 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Binaries
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            output: focus-symphony-linux-amd64
+          - goos: linux
+            goarch: arm64
+            output: focus-symphony-linux-arm64
+          - goos: windows
+            goarch: amd64
+            output: focus-symphony-windows-amd64.exe
+          - goos: darwin
+            goarch: amd64
+            output: focus-symphony-macos-amd64
+          - goos: darwin
+            goarch: arm64
+            output: focus-symphony-macos-arm64
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Build binary
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 0
+        run: |
+          go build -ldflags="-s -w" -o ${{ matrix.output }} main.go
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.output }}
+          path: ${{ matrix.output }}
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./binaries
+
+      - name: Display structure
+        run: ls -R ./binaries
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release
+          find ./binaries -type f -exec cp {} release/ \;
+          chmod +x release/focus-symphony-*
+          cd release
+          for file in focus-symphony-*; do
+            if [[ ! "$file" == *.exe ]]; then
+              chmod +x "$file"
+            fi
+          done
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: release/*
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          body: |
+            ## 🚀 Focus-Symphony Release
+            
+            ### Download the right binary for your system:
+            
+            - **Linux (x64)**: `focus-symphony-linux-amd64`
+            - **Linux (ARM64)**: `focus-symphony-linux-arm64`
+            - **Windows (x64)**: `focus-symphony-windows-amd64.exe`
+            - **macOS (Intel)**: `focus-symphony-macos-amd64`
+            - **macOS (Apple Silicon)**: `focus-symphony-macos-arm64`
+            
+            ### Quick Start:
+            
+            **Linux/macOS:**
+            ```bash
+            chmod +x focus-symphony-*
+            sudo ./focus-symphony-*
+            ```
+            
+            **Windows:**
+            Right-click `focus-symphony-windows-amd64.exe` → Run as Administrator
+            
+            ### ⚠️ Important:
+            - Disable "Secure DNS" (DNS over HTTPS) in your browser settings
+            - Restart your browser after running `start` command
+            - Music features require `mpv` and `yt-dlp` (install separately)
+            
+            See [README](https://github.com/${{ github.repository }}) for full documentation.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
