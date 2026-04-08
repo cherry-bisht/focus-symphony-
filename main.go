@@ -134,22 +134,21 @@ func startSession() {
 }
 
 func stopSession() {
-	if isShieldActive {
-		if os.Getuid() != 0 {
-			relaunchWithSudo()
-			return
-		}
-		fmt.Println("⚡ Deactivating Acoustic Shield...")
-		cleanHosts()
-		isShieldActive = false
-		fmt.Println("✅ World access restored.")
-	} else {
-		fmt.Println("   (No active shield to stop.)")
+	if os.Getuid() != 0 {
+		relaunchWithSudo()
+		return
 	}
+	fmt.Println("⚡ Deactivating Acoustic Shield...")
+	cleanHosts()
+	isShieldActive = false
+	fmt.Println("✅ World access restored.")
 }
 
 func cleanHosts() {
-	input, _ := os.ReadFile(hostsPath)
+	input, err := os.ReadFile(hostsPath)
+	if err != nil {
+		return
+	}
 	lines := strings.Split(string(input), "\n")
 	var newLines []string
 	isBlocking := false
@@ -159,11 +158,16 @@ func cleanHosts() {
 			isBlocking = !isBlocking
 			continue
 		}
-		if !isBlocking && trimmed != "" {
+		if !isBlocking {
 			newLines = append(newLines, line)
 		}
 	}
-	os.WriteFile(hostsPath, []byte(strings.Join(newLines, "\n")+"\n"), 0644)
+	// Join lines and ensure a single trailing newline if the file wasn't empty
+	output := strings.Join(newLines, "\n")
+	if len(output) > 0 && output[len(output)-1] != '\n' {
+		output += "\n"
+	}
+	os.WriteFile(hostsPath, []byte(output), 0644)
 }
 
 func getEffectiveUser() string {

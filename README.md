@@ -27,16 +27,27 @@ A modern landing page designed with **Vanilla CSS** and **ScrollReveal**:
 ---
 
 ## 🛠️ Installation
-
 ### One-Command Install (Recommended)
 
 ```bash
-git clone https://github.com/cherry-bisht/focus-symphony-.git
+git clone https://github.com/BISHT-CX/focus-symphony-.git
 cd focus-symphony-
 chmod +x build.sh && ./build.sh
 ```
 
 The installer auto-detects your system and installs missing dependencies via `pacman`, `apt`, `dnf`, `brew`, `zypper`, or `apk`.
+
+---
+
+## ⚠️ Important: Site Blocking & DNS
+
+If site blocking (YouTube, etc.) does not seem to work even after running `start`:
+
+1.  **Disable "Secure DNS" / "DNS over HTTPS"** in your browser settings (Chrome: `Settings -> Security -> Use secure DNS`; Firefox: `Settings -> Privacy & Security -> DNS over HTTPS`).
+2.  **Restart your browser** after running `start` for the changes to take effect.
+3.  **Flush your DNS cache** (Linux: `resolvectl flush-caches` or `sudo systemd-resolve --flush-caches`).
+
+---
 
 ### Manual Install
 
